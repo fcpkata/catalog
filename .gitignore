@@ -4,3 +4,12 @@
 # Ignore Gradle build output directory
 build
 bin
+
+# IDE files
+.classpath
+.project
+
+# Temp files
+*.swp
+*~
+
