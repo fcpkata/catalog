@@ -19,7 +19,7 @@ import com.spring.catalog.model.Product;
 import com.spring.catalog.util.ProductUtility;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CatalogControllerTest {
+public class CatalogControllerSpec {
 
 	@Mock
 	private ProductService mockProductService;
@@ -55,7 +55,7 @@ public class CatalogControllerTest {
 
 	private void mockProductsServiceToSendBackProducts(Category category) {
 
-		when(mockProductService.fetchAllProducts()).thenReturn(
+		when(mockProductService.fetchProductsFor(category)).thenReturn(
 				Optional.ofNullable(category)
 						.map(value -> ProductUtility.products.stream()
 															 .filter(product -> product.getCategory().equals(value))

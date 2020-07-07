@@ -1,8 +1,5 @@
 package com.spring.catalog.controller;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,20 +27,9 @@ public class CatalogController {
 
 	@GetMapping(path = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Product>> getCatalog(@RequestParam(name = "category", required = false) Category category) {
-
-		List<Product> products = productService.fetchAllProducts().stream()
-																		  .filter(validateCategory(category))
-																		  .collect(Collectors.toList());
 		
-		ResponseEntity<List<Product>> response = new ResponseEntity<>(products, HttpStatus.OK);
+		ResponseEntity<List<Product>> response = new ResponseEntity<>(productService.fetchProductsFor(category), HttpStatus.OK);
 		return response;
-	}
-
-	private Predicate<Product> validateCategory(Category category) {
-		
-		return product -> Optional.ofNullable(category)
-								  .map(value -> product.getCategory().equals(value))
-								  .orElse(true);
 	}
 
 }
