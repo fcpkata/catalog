@@ -1,26 +1,67 @@
 package com.spring.catalog.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
+import com.spring.catalog.model.Category;
 import com.spring.catalog.model.Product;
+import com.spring.catalog.util.ProductUtility;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CatalogControllerTest {
 
-	public CatalogController catlogController = new CatalogController();
+	@Mock
+	private ProductService mockProductService;
+	
+	public CatalogController catlogController;
+	
+	@Before
+	public void setup() {		
+		catlogController = new CatalogController(mockProductService);
+	}
+	
 
 	@Test
-	public void shouldReturnCatalogWhenGetCatalogIsCalled() throws Exception {
-		Product product = new Product("Book", "Classmate", "100-pages", "50");
-		ResponseEntity<List<Product>> response = catlogController.getCatalog();
-		assertThat(response.getBody().get(0).equals(product));
+	public void shouldReturnAllCatalog_WhenInvokedWithoutNullCategory() throws Exception {
+		
+		mockProductsServiceToSendBackProducts(null);
+		
+		ResponseEntity<List<Product>> response = catlogController.getCatalog(null);
+		
+		assertThat(response.getBody().size()).isGreaterThan(0);
+	}
+	
+	
+	@Test
+	public void shouldReturnSpecificProducts_WhenInvokedWithCategory() throws Exception {
+		
+		mockProductsServiceToSendBackProducts(Category.Mystry);
+		
+		ResponseEntity<List<Product>> response = catlogController.getCatalog(Category.Mystry);
+		
+		assertThat(response.getBody().get(0).getCategory()).isEqualTo(Category.Mystry);
+	}
+
+	private void mockProductsServiceToSendBackProducts(Category category) {
+
+		when(mockProductService.fetchAllProducts()).thenReturn(
+				Optional.ofNullable(category)
+						.map(value -> ProductUtility.products.stream()
+															 .filter(product -> product.getCategory().equals(value))
+															 .collect(Collectors.toList()))
+						.orElseGet(() -> ProductUtility.products)
+			);
 	}
 
 }
