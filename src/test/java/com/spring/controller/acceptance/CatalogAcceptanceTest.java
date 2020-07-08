@@ -100,5 +100,4 @@ public class CatalogAcceptanceTest {
 		MockHttpServletRequestBuilder requestBuilder = get("/v1/product").queryParam("productId", "");
 		mockMvc.perform(requestBuilder).andDo(print()).andExpect(status().isNotFound());
 	}
-
 }
