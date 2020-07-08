@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
+import com.spring.catalog.exception.ProductNotFoundException;
 import com.spring.catalog.model.FilterCriteria;
 import com.spring.catalog.model.Product;
 import com.spring.catalog.repository.ProductRepository;
@@ -19,16 +19,33 @@ public class CatalogService {
 	
 	public List<Product> getProducts(FilterCriteria criteria){
 		List<Product> allProducts = productRepository.getProducts();
-		if(!StringUtils.isEmpty(criteria.getCategoryId())) {
-			return filterProducts(criteria.getCategoryId(), allProducts);
-		}
-		return allProducts;
+		return filterProducts(allProducts, criteria);
 	}
 
-	private List<Product> filterProducts(String categoryId, List<Product> allProducts) {
+	public Product getProduct(String productId) {
+		List<Product> allProducts = productRepository.getProducts();
+		
 		return allProducts.stream()
-		.filter(product -> product.getCategory().getId().equals(categoryId))
-		.collect(Collectors.toList());
+			.filter(product -> product.getId().equals(productId))
+			.findFirst()
+			.orElseThrow(ProductNotFoundException::new);
+	}
+
+	private List<Product> filterProducts(List<Product> allProducts, FilterCriteria criteria) {
+		List<Product> filteredProducts = allProducts;
+		if(criteria.getCategoryId() != null) {
+			filteredProducts = allProducts.stream()
+					.filter(product -> product.getCategory().getId().equals(criteria.getCategoryId()))
+					.collect(Collectors.toList());
+		}
+		
+		if(!criteria.getMetaDataFilters().isEmpty()) {
+			filteredProducts = filteredProducts.stream()
+				.filter(product -> product.hasMetadata(criteria.getMetaDataFilters()))
+				.collect(Collectors.toList());
+		}
+		
+		return filteredProducts;
 	}
 
 }

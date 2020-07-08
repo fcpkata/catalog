@@ -10,8 +10,6 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class Category {
-	
 	private String id;
 	private String name;
-	
 }

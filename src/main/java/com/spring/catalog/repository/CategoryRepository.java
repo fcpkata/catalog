@@ -5,6 +5,7 @@ import com.spring.catalog.model.Category;
 public enum CategoryRepository {
 	
 	BOOKS("books", "Books"),
+	ELECTRONICS("electronics", "Electronics"),
 	PHONE("phones", "Cell Phones");
 	
 	private Category category;

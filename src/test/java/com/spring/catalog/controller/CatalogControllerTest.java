@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 
 import com.spring.catalog.model.FilterCriteria;
 import com.spring.catalog.model.Product;
-import com.spring.catalog.repository.CategoryRepository;
 import com.spring.catalog.service.CatalogService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -26,20 +25,28 @@ public class CatalogControllerTest {
 	private CatalogController catlogController;
 	@Mock
 	private CatalogService catalogService;
-	
 
 	@Test
 	public void shouldReturnCatalogWhenGetCatalogIsCalled() throws Exception {
 		
-		Product product = new Product("Book", "Classmate", "100-pages", "50", CategoryRepository.BOOKS.getCategory());
+		Product product = Product.builder().build();
 		Mockito.when(catalogService.getProducts(Mockito.any(FilterCriteria.class))).thenReturn(Arrays.asList(product));
 		
-		ResponseEntity<List<Product>> response = catlogController.getCatalog(null);
+		ResponseEntity<List<Product>> response = catlogController.getCatalog(null, null);
 		
-		assertThat(response.getBody().get(0)).isEqualTo(product);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody().get(0)).isEqualTo(product);
 	}
 	
-	
-
+	@Test
+	public void shouldReturnSingleProduct() {
+		Product product = Product.builder().build();
+		Mockito.when(catalogService.getProduct("PD001"))
+			.thenReturn(product);
+		
+		ResponseEntity<Product> response = catlogController.getProductDetailsById("PD001");
+		
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isEqualTo(product);
+	}
 }
