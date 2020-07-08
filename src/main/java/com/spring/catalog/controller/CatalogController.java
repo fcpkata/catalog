@@ -9,23 +9,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.catalog.db.PrdouctDetailTemplate;
 import com.spring.catalog.model.Category;
 import com.spring.catalog.model.Product;
-
 
 @RestController
 @RequestMapping("/v1")
 public class CatalogController {
 
 	private ProductService productService;
+	private PrdouctDetailTemplate prdouctDetailTemplate;
 
 	@Autowired
-	public CatalogController(ProductService productService) {
+	public CatalogController(ProductService productService, PrdouctDetailTemplate prdouctDetailTemplate) {
 		this.productService = productService;
+		this.prdouctDetailTemplate = prdouctDetailTemplate;
 	}
 
 	@GetMapping(path = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,6 +47,15 @@ public class CatalogController {
 		return product -> Optional.ofNullable(category)
 								  .map(value -> product.getCategory().equals(value))
 								  .orElse(true);
+	}
+	
+	@GetMapping(path = "/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Product> getProductDetailsById(@PathVariable(value = "productId") String productId) {
+
+		Product response = prdouctDetailTemplate.getProductDetailsFromDb(productId);
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+		
 	}
 
 }
