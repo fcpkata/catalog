@@ -1,78 +1,59 @@
 package com.spring.catalog.controller;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.catalog.model.FilterCriteria;
 import com.spring.catalog.model.Product;
+import com.spring.catalog.service.CatalogService;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping(value = "/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CatalogController {
-
-	private ProductService productService;
-
+	
+	private CatalogService catalogService;
+	
 	@Autowired
-	public CatalogController(ProductService productService) {
-		this.productService = productService;
+	public CatalogController(CatalogService catalogService) {
+		this.catalogService = catalogService;
 	}
 
-	@GetMapping(path = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Product>> getCatalog(@RequestParam(name = "category", required = false) String category) {
+	@GetMapping(path = "/products" )
+	public ResponseEntity<List<Product>> getCatalog(
+			@RequestParam(name= "category", required = false) String categoryId,
+			@RequestParam(name= "genre", required = false) String genre) {
+		Map<String, String> metadata = new HashMap<>();
+		if(!StringUtils.isEmpty(genre)) {
+			metadata.put("genre", genre);
+		}
+		FilterCriteria criteria = FilterCriteria.builder()
+				.categoryId(categoryId)
+				.metaDataFilters(metadata)
+				.build();
 		
-		ResponseEntity<List<Product>> response = new ResponseEntity<>(productService.fetchProductsFor(category), HttpStatus.OK);
+		List<Product> products = catalogService.getProducts(criteria);
+		
+		ResponseEntity<List<Product>> response = new ResponseEntity<>(products, HttpStatus.OK);
 		return response;
 	}
 	
 	@GetMapping(path = "/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Product> getProductDetailsById(@PathVariable(value = "productId") String productId) {
 
-		Product response = getProductDetailsFromDb(productId);
-		
+		Product response = catalogService.getProduct(productId);
+
 		return new ResponseEntity<>(response, HttpStatus.OK);
-		
 	}
-	
-	@GetMapping(path = "/filter/{filtertitle}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Product>> getFilteredProducts(@PathVariable("filtertitle") String filterTitle) {
-		
-		List<Product> products = productService.fetchFilteredProductesFor(filterTitle);
-		
-		return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
-	}
-	
-	@GetMapping(path = "/filterByCategory/{filtertitle}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Product>> getFilterByCatagoryProducts(
-			@PathVariable("filtertitle") String filterTitle,
-			@RequestParam(name = "category", required = false) String category) {
-		
-		List<Product> products = productService.fetchFilteredProductesFor(filterTitle, category);
-		
-		return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
-	}
-	
-	public Product getProductDetailsFromDb(String productId) {
-
-		Map<String, List<Product>> productDetails =  productService.fetchProductsFor(null).stream()
-				.collect(Collectors.groupingBy(Product :: getId, 
-						Collectors.toList()));
-
-		return Optional.ofNullable(productDetails.get(productId)).map( product -> {
-			Product value = product.get(0);
-			value.setDetailsPresent(true);
-			return value;
-		}).orElse(new Product());
-	}
-
-	
 }
