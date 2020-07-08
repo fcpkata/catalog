@@ -28,6 +28,23 @@ public class ProductUtility {
 	 			.description("In the South, family is always more complicated than it seems.")
 	 			.price(Price.prepareINRPriceFor(900.02))
 	 			.build());
+		
+		products.add(Product.builder().id("PD004")
+				.name("The Argumentative Indian by Amartya Sen")
+				.category(Category.Historical_Friction)
+				.price(Price.prepareINRPriceFor(500.02))
+				.description("Written by the Nobel Prize winning economist Amartya Sen, "
+						+ "this book is essentially a series of poignant essays narrating "
+						+ "India’s history and how that history has influenced and shaped its cultural identity.")
+				.build());
+
+		products.add(Product.builder().id("PD005")
+				.name("The Wonder That Was India by A L Basham")
+				.category(Category.Historical_Friction)
+				.price(Price.prepareINRPriceFor(400.02))
+				.description("This book is considered a useful source of history for aspirants to the Indian civil services. "
+						+ "Basham’s popular work covers the period between ancient India and the arrival of the Muslims")
+				.build());
 	}
 	
 }

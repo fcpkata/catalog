@@ -1,6 +1,7 @@
 package com.spring.catalog.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import com.spring.catalog.util.ProductUtility;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CatalogControllerTest {
-
+	
 	@Mock
 	private ProductService mockProductService;
 	
@@ -63,5 +64,39 @@ public class CatalogControllerTest {
 						.orElseGet(() -> ProductUtility.products)
 			);
 	}
+	
+	@Test
+	public void shoulRetrunProductDetailsWhenGetProductDetailsIsPresent() {
+		
+		getAvaliableProducts();
+		ResponseEntity<Product> response = catlogController.getProductDetailsById("PD001");
+		validateResponse(response);
+	}
 
+
+	@Test
+	public void shoulRetrunDetailsPresentAsFalseWhenGetProductDetailsIsNotPresent() {
+		getAvaliableProducts();
+		ResponseEntity<Product> response = catlogController.getProductDetailsById("Product03");
+		assertThat(response.getStatusCodeValue()).isEqualTo(200);
+		assertNotNull(response.getBody());
+		assertThat(response.getBody().isDetailsPresent()).isEqualTo(false);
+	}
+	
+	private void getAvaliableProducts() {
+		when(mockProductService.fetchAllProducts()).thenReturn(ProductUtility.products.stream()
+															 .collect(Collectors.toList()));
+	}
+
+	
+	private void validateResponse(ResponseEntity<Product> response) {
+		assertThat(response.getStatusCodeValue()).isEqualTo(200);
+		assertNotNull(response.getBody());
+		assertThat(response.getBody().getId()).isEqualTo("PD001");
+		assertThat(response.getBody().getName()).isEqualTo("Sold on a Monday");
+		assertThat(response.getBody().getPrice().getValue()).isEqualTo(1200.99);
+		assertThat(response.getBody().getDescription()).isEqualTo("An unforgettable historical fiction novel by Kristina McMorris, inspired by a stunning piece of history from Depression-Era America.");
+		assertThat(response.getBody().isDetailsPresent()).isEqualTo(true);
+	}
+	
 }
