@@ -85,6 +85,15 @@ public class CatalogControllerSpec {
 	}
 	
 	@Test
+	public void shouldReturnOneSpecificProduct_whenFilteredWithNameAndCategoryMaha() {
+		mockProductsServiceToSendBackFilteredByCategoryProducts("the", BookCategory.Historical_Friction.toString());
+		
+		ResponseEntity<List<Product>> response = catlogController.getFilterByCatagoryProducts("the", BookCategory.Historical_Friction.toString());
+		
+		assertThat(response.getBody().size()).isEqualTo(4);
+	}
+	
+	@Test
 	public void shouldReturnEmptyList_whenFilteredWithNameWater() {
 		mockProductsServiceToSendBackFilteredProducts("water");
 		
@@ -109,6 +118,17 @@ public class CatalogControllerSpec {
 				Optional.ofNullable(filterBookTitle)
 						.map(value -> ProductUtility.products.stream()
 															 .filter(product -> product.getName().toLowerCase().contains(value.toLowerCase()))
+															 .collect(Collectors.toList()))
+						.orElseGet(() -> new ArrayList<>())
+			);
+	}
+	
+	private void mockProductsServiceToSendBackFilteredByCategoryProducts(String filterBookTitle, String category) {
+		when(mockProductService.fetchFilteredProductesFor(filterBookTitle, category)).thenReturn(
+				Optional.ofNullable(filterBookTitle)
+						.map(value -> ProductUtility.products.stream()
+															 .filter(product -> product.getName().toLowerCase().contains(value.toLowerCase())
+																	 && product.getCategory().toString().equals(category))
 															 .collect(Collectors.toList()))
 						.orElseGet(() -> new ArrayList<>())
 			);

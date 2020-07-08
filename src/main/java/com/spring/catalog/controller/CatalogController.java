@@ -43,10 +43,20 @@ public class CatalogController {
 		
 	}
 	
-	@GetMapping(path = "/filter/{filterbooktitle}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Product>> getFilteredProducts(@PathVariable("filterbooktitle") String filterBookTitle) {
+	@GetMapping(path = "/filter/{filtertitle}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Product>> getFilteredProducts(@PathVariable("filtertitle") String filterTitle) {
 		
-		List<Product> products = productService.fetchFilteredProductesFor(filterBookTitle);
+		List<Product> products = productService.fetchFilteredProductesFor(filterTitle);
+		
+		return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "/filterByCategory/{filtertitle}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Product>> getFilterByCatagoryProducts(
+			@PathVariable("filtertitle") String filterTitle,
+			@RequestParam(name = "category", required = false) String category) {
+		
+		List<Product> products = productService.fetchFilteredProductesFor(filterTitle, category);
 		
 		return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
 	}

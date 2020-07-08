@@ -78,6 +78,13 @@ public class CatalogAcceptanceTest {
 	}
 	
 	@Test
+	public void shouldReturnOnlyProductsWithNameAndCategory() throws Exception {
+		mockMvc.perform(get("/v1/filterByCategory/the?category="+BookCategory.Historical_Friction.toString())).andDo(print()).andExpect(status().isOk())
+		.andExpect(jsonPath("$.length()").value(4))
+		.andExpect(jsonPath("$.[0].name").value("Flight of the Sparrow"));
+	}
+	
+	@Test
 	public void shouldReturnEmptyListWithNameContaingWater() throws Exception {
 		mockMvc.perform(get("/v1/filter/water")).andDo(print()).andExpect(status().isOk())
 		.andExpect(jsonPath("$.length()").value(0));

@@ -28,12 +28,18 @@ public class ProductService {
 				  .collect(Collectors.toList());
 	}
 	
-	public List<Product> fetchFilteredProductesFor(String filteredBookTitle) {
+	public List<Product> fetchFilteredProductesFor(String filteredTitle) {
 		
 		return repository.fetchAllProducts().stream()
-				.filter(validateFilter(filteredBookTitle))
+				.filter(validateFilter(filteredTitle))
 				.collect(Collectors.toList());
 				
+	}
+	
+	public List<Product> fetchFilteredProductesFor(String filterTitle, String category) {
+		return repository.fetchAllProducts().stream()
+				.filter(validateFilterByCategory(filterTitle, category))
+				.collect(Collectors.toList());
 	}
 	
 	private Predicate<Product> validateBookCategory(String category) {
@@ -43,11 +49,17 @@ public class ProductService {
 									  .orElse(true);
 		}
 	
-	private Predicate<Product> validateFilter(String bookTitle) {
+	private Predicate<Product> validateFilter(String title) {
 
-		return product -> Optional.ofNullable(bookTitle)
+		return product -> Optional.ofNullable(title)
 								  .map(value -> (product.getName().toLowerCase()).contains(value.toLowerCase()))
 								  .orElse(true);
 	}
 
+	private Predicate<? super Product> validateFilterByCategory(String filterTitle, String category) {
+		return product -> Optional.ofNullable(filterTitle)
+				  .map(value -> (product.getName().toLowerCase()).contains(value.toLowerCase())
+						  && product.getCategory().toString().equals(category))
+				  .orElse(true);
+	}
 }

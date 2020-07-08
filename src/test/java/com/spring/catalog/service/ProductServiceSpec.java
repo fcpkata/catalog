@@ -55,4 +55,11 @@ public class ProductServiceSpec {
 		List<Product> products = productService.fetchFilteredProductesFor("Tehran");
 		assertThat(products.get(0).getName()).isEqualTo("The stationery shop of Tehran");
 	}
+	
+	@Test
+	public void fetchesFilteredProductsWithTheGivenNameAndCategory() {
+		List<Product> products = productService.fetchFilteredProductesFor("the", BookCategory.Historical_Friction.toString());
+		assertThat(products.size()).isEqualTo(4);
+		assertThat(products.get(0).getName()).isEqualTo("Flight of the Sparrow");
+	}
 }
