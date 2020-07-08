@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.spring.catalog.model.Category;
+import com.spring.catalog.model.BookCategory;
 import com.spring.catalog.model.Product;
 
 
@@ -26,9 +26,9 @@ public class CatalogController {
 	}
 
 	@GetMapping(path = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Product>> getCatalog(@RequestParam(name = "category", required = false) Category category) {
+	public ResponseEntity<List<Product>> getCatalog(@RequestParam(name = "category", required = false) BookCategory bookCategory) {
 		
-		ResponseEntity<List<Product>> response = new ResponseEntity<>(productService.fetchProductsFor(category), HttpStatus.OK);
+		ResponseEntity<List<Product>> response = new ResponseEntity<>(productService.fetchProductsFor(bookCategory), HttpStatus.OK);
 		return response;
 	}
 
