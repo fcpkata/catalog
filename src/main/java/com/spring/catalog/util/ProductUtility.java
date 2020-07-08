@@ -31,7 +31,6 @@ public class ProductUtility {
 	 			.price(Price.prepareINRPriceFor(900.02))
 	 			.build());
 		
-<<<<<<< HEAD
 		products.add(Product.builder().id("PD004")
 				.name("The Argumentative Indian by Amartya Sen")
 				.category(BookCategory.Historical_Friction)
@@ -50,25 +49,15 @@ public class ProductUtility {
 				.build());
 
 		products.add(Product.builder().id("PD006").name("Acer Swift 3").category(ElectronicsCategory.Laptop)
-=======
-		products.add(Product.builder().id("PD004").name("Acer Swift 3").category(ElectronicsCategory.Laptop)
->>>>>>> d914af0be681c8e07bff24842fa919f7279d62e6
 	 			.description("Acer Swift 3 Thin & Light Laptop, 14 inch Full HD IPS")
 	 			.price(Price.prepareINRPriceFor(67900.99))
 	 			.build());
 		
-<<<<<<< HEAD
 		products.add(Product.builder().id("PD007").name("SAMSUNG 65-inch").category(ElectronicsCategory.TV)
 	 			.description("SAMSUNG 65-inch Class QLED Q70T Series - 4K UHD Dual LED Quantum HDR Smart TV")
 	 			.price(Price.prepareINRPriceFor(98600.27))
 	 			.build());
 
-=======
-		products.add(Product.builder().id("PD005").name("SAMSUNG 65-inch").category(ElectronicsCategory.TV)
-	 			.description("SAMSUNG 65-inch Class QLED Q70T Series - 4K UHD Dual LED Quantum HDR Smart TV")
-	 			.price(Price.prepareINRPriceFor(98600.27))
-	 			.build());
->>>>>>> d914af0be681c8e07bff24842fa919f7279d62e6
 	}
 	
 }
