@@ -2,7 +2,6 @@ package com.spring.catalog.controller;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.spring.catalog.model.Category;
 import com.spring.catalog.model.Product;
 
 @RestController
@@ -30,21 +28,10 @@ public class CatalogController {
 	}
 
 	@GetMapping(path = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Product>> getCatalog(@RequestParam(name = "category", required = false) Category category) {
-
-		List<Product> products = productService.fetchAllProducts().stream()
-																		  .filter(validateCategory(category))
-																		  .collect(Collectors.toList());
+	public ResponseEntity<List<Product>> getCatalog(@RequestParam(name = "category", required = false) String category) {
 		
-		ResponseEntity<List<Product>> response = new ResponseEntity<>(products, HttpStatus.OK);
+		ResponseEntity<List<Product>> response = new ResponseEntity<>(productService.fetchProductsFor(category), HttpStatus.OK);
 		return response;
-	}
-
-	private Predicate<Product> validateCategory(Category category) {
-		
-		return product -> Optional.ofNullable(category)
-								  .map(value -> product.getCategory().equals(value))
-								  .orElse(true);
 	}
 	
 	@GetMapping(path = "/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -58,7 +45,7 @@ public class CatalogController {
 	
 	public Product getProductDetailsFromDb(String productId) {
 
-		Map<String, List<Product>> productDetails =  productService.fetchAllProducts().stream()
+		Map<String, List<Product>> productDetails =  productService.fetchProductsFor(null).stream()
 				.collect(Collectors.groupingBy(Product :: getId, 
 						Collectors.toList()));
 
@@ -68,5 +55,4 @@ public class CatalogController {
 			return value;
 		}).orElse(new Product());
 	}
-
 }
