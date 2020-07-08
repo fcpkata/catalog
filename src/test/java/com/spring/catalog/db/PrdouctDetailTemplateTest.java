@@ -20,7 +20,7 @@ public class PrdouctDetailTemplateTest {
 		assertNotNull(response);
 		assertThat(response.getId()).isEqualTo("Product01");
 		assertThat(response.getName()).isEqualTo("The Argumentative Indian by Amartya Sen");
-		assertThat(response.getPrice()).isEqualTo(500.02);
+		assertThat(response.getPrice().getValue()).isEqualTo(500.02);
 		assertThat(response.getDescription()).isEqualTo("Written by the Nobel Prize winning economist Amartya Sen, this book is essentially a series of poignant essays narrating India’s history and how that history has influenced and shaped its cultural identity.");
 		assertThat(response.isDetailsPresent()).isEqualTo(true);
 	}
