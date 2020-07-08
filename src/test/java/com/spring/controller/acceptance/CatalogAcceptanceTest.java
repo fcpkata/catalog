@@ -39,6 +39,7 @@ public class CatalogAcceptanceTest {
 	@Test
 	public void shouldReturnOnlyHistoricalFrictionProducts() throws Exception {
 		mockMvc.perform(get("/v1/products?category="+BookCategory.Historical_Friction)).andDo(print()).andExpect(status().isOk())
+<<<<<<< HEAD
 		.andExpect(jsonPath("$.length()").isNotEmpty())
 		.andExpect(jsonPath("$.[0].category").value(BookCategory.Historical_Friction.toString()))
 		.andExpect(jsonPath("$.[1].category").value(BookCategory.Historical_Friction.toString()));
@@ -69,5 +70,11 @@ public class CatalogAcceptanceTest {
 		mockMvc.perform(requestBuilder).andDo(print()).andExpect(status().isNotFound());
 
 	}
+=======
+		.andExpect(jsonPath("$.length()").value(2))
+		.andExpect(jsonPath("$.[0].category").value(BookCategory.Historical_Friction.toString()))
+		.andExpect(jsonPath("$.[1].category").value(BookCategory.Historical_Friction.toString()));
+	}
+>>>>>>> d914af0be681c8e07bff24842fa919f7279d62e6
 
 }
