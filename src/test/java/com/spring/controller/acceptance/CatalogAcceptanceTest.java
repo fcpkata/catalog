@@ -69,5 +69,17 @@ public class CatalogAcceptanceTest {
 		mockMvc.perform(requestBuilder).andDo(print()).andExpect(status().isNotFound());
 
 	}
-
+	
+	@Test
+	public void shouldReturnOnlyProductsWithNameContaingTehran() throws Exception {
+		mockMvc.perform(get("/v1/filter/Tehran")).andDo(print()).andExpect(status().isOk())
+		.andExpect(jsonPath("$.length()").value(1))
+		.andExpect(jsonPath("$.[0].name").value("The stationery shop of Tehran"));
+	}
+	
+	@Test
+	public void shouldReturnEmptyListWithNameContaingWater() throws Exception {
+		mockMvc.perform(get("/v1/filter/water")).andDo(print()).andExpect(status().isOk())
+		.andExpect(jsonPath("$.length()").value(0));
+	}
 }

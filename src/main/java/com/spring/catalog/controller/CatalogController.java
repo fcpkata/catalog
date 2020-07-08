@@ -38,9 +38,17 @@ public class CatalogController {
 	public ResponseEntity<Product> getProductDetailsById(@PathVariable(value = "productId") String productId) {
 
 		Product response = getProductDetailsFromDb(productId);
-
+		
 		return new ResponseEntity<>(response, HttpStatus.OK);
 		
+	}
+	
+	@GetMapping(path = "/filter/{filterbooktitle}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Product>> getFilteredProducts(@PathVariable("filterbooktitle") String filterBookTitle) {
+		
+		List<Product> products = productService.fetchFilteredProductesFor(filterBookTitle);
+		
+		return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
 	}
 	
 	public Product getProductDetailsFromDb(String productId) {
@@ -55,4 +63,6 @@ public class CatalogController {
 			return value;
 		}).orElse(new Product());
 	}
+
+	
 }

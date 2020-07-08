@@ -22,7 +22,7 @@ public class ProductUtility {
 	 			.build());
 		
 		products.add(Product.builder().id("PD002").name("Flight of the Sparrow").category(BookCategory.Historical_Friction)
-	 			.description("A compelling, emotionally gripping”* novel of historical fiction—perfect for readers of America’s First Daughter")
+	 			.description("A compelling, emotionally gripping/'s novel of historical fiction/'sperfect for readers of America/'s First Daughter")
 	 			.price(Price.prepareINRPriceFor(1000.80))
 	 			.build());
 		
@@ -37,7 +37,7 @@ public class ProductUtility {
 				.price(Price.prepareINRPriceFor(500.02))
 				.description("Written by the Nobel Prize winning economist Amartya Sen, "
 						+ "this book is essentially a series of poignant essays narrating "
-						+ "India’s history and how that history has influenced and shaped its cultural identity.")
+						+ "India/'s history and how that history has influenced and shaped its cultural identity.")
 				.build());
 
 		products.add(Product.builder().id("PD005")
@@ -45,7 +45,7 @@ public class ProductUtility {
 				.category(BookCategory.Historical_Friction)
 				.price(Price.prepareINRPriceFor(400.02))
 				.description("This book is considered a useful source of history for aspirants to the Indian civil services. "
-						+ "Basham’s popular work covers the period between ancient India and the arrival of the Muslims")
+						+ "Basham/'s popular work covers the period between ancient India and the arrival of the Muslims")
 				.build());
 
 		products.add(Product.builder().id("PD006").name("Acer Swift 3").category(ElectronicsCategory.Laptop)
@@ -58,6 +58,20 @@ public class ProductUtility {
 	 			.price(Price.prepareINRPriceFor(98600.27))
 	 			.build());
 
+		products.add(Product.builder().id("PD008").name("The stationery shop of Tehran").category(BookCategory.Historical_Friction)
+				.description("Roya loves nothing better than to while away the hours in the local stationery shop run by Mr. Fakhri.")
+				.price(Price.prepareINRPriceFor(1199.00))
+				.build());
+		
+		products.add(Product.builder().id("PD009").name("Mahavat").category(BookCategory.Mystry)
+				.description("This is the story of the time when Indian economy and civilization was taking a new turn.")
+				.price(Price.prepareINRPriceFor(199.00))
+				.build());
+		
+		products.add(Product.builder().id("PD010").name("Suheldev").category(BookCategory.Historical_Friction)
+				.description("Repeated attacks by Mahmud of Ghazni and his barbaric Turkic hordes have weakened Indiaâ€™s northern regions.")
+				.price(Price.prepareINRPriceFor(299.00))
+				.build());
 	}
 	
 }
