@@ -20,8 +20,8 @@ import com.spring.catalog.model.Product;
 import com.spring.catalog.util.ProductUtility;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CatalogControllerTest {
-	
+public class CatalogControllerSpec {
+
 	@Mock
 	private ProductService mockProductService;
 	
@@ -32,7 +32,6 @@ public class CatalogControllerTest {
 		catlogController = new CatalogController(mockProductService);
 	}
 	
-
 	@Test
 	public void shouldReturnAllCatalog_WhenInvokedWithoutNullCategory() throws Exception {
 		
@@ -56,7 +55,7 @@ public class CatalogControllerTest {
 
 	private void mockProductsServiceToSendBackProducts(Category category) {
 
-		when(mockProductService.fetchAllProducts()).thenReturn(
+		when(mockProductService.fetchProductsFor(category)).thenReturn(
 				Optional.ofNullable(category)
 						.map(value -> ProductUtility.products.stream()
 															 .filter(product -> product.getCategory().equals(value))
@@ -84,7 +83,7 @@ public class CatalogControllerTest {
 	}
 	
 	private void getAvaliableProducts() {
-		when(mockProductService.fetchAllProducts()).thenReturn(ProductUtility.products.stream()
+		when(mockProductService.fetchProductsFor(null)).thenReturn(ProductUtility.products.stream()
 															 .collect(Collectors.toList()));
 	}
 
