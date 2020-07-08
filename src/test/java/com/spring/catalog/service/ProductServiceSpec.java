@@ -49,4 +49,10 @@ public class ProductServiceSpec {
 		List<Product> products = productService.fetchProductsFor(ElectronicsCategory.Laptop.toString());
 		assertThat(products.get(0).getCategory()).isEqualTo(ElectronicsCategory.Laptop);
 	}
+	
+	@Test
+	public void fetchesFilteredProductsWithTheGivenName() {
+		List<Product> products = productService.fetchFilteredProductesFor("Tehran");
+		assertThat(products.get(0).getName()).isEqualTo("The stationery shop of Tehran");
+	}
 }

@@ -28,11 +28,26 @@ public class ProductService {
 				  .collect(Collectors.toList());
 	}
 	
+	public List<Product> fetchFilteredProductesFor(String filteredBookTitle) {
+		
+		return repository.fetchAllProducts().stream()
+				.filter(validateFilter(filteredBookTitle))
+				.collect(Collectors.toList());
+				
+	}
+	
 	private Predicate<Product> validateBookCategory(String category) {
 			
 			return product -> Optional.ofNullable(category)
 									  .map(value -> product.getCategory().toString().equals(value))
 									  .orElse(true);
 		}
+	
+	private Predicate<Product> validateFilter(String bookTitle) {
+
+		return product -> Optional.ofNullable(bookTitle)
+								  .map(value -> (product.getName().toLowerCase()).contains(value.toLowerCase()))
+								  .orElse(true);
+	}
 
 }

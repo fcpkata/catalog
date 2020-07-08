@@ -3,6 +3,7 @@ package com.spring.catalog.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,7 +53,46 @@ public class CatalogControllerSpec {
 		
 		assertThat(response.getBody().get(0).getCategory()).isEqualTo(BookCategory.Mystry);
 	}
-
+	
+	@Test
+	public void shouldReturnOneSpecificProduct_whenFilteredWithNameTehran() {
+		mockProductsServiceToSendBackFilteredProducts("Tehran");
+		
+		ResponseEntity<List<Product>> response = catlogController.getFilteredProducts("Tehran");
+		
+		assertThat(response.getBody().size()).isEqualTo(1);
+		assertThat(response.getBody().get(0).getName()).isEqualTo("The stationery shop of Tehran");
+	}
+	
+	@Test
+	public void shouldReturnOneSpecificProduct_whenFilteredWithNameMaha() {
+		mockProductsServiceToSendBackFilteredProducts("Maha");
+		
+		ResponseEntity<List<Product>> response = catlogController.getFilteredProducts("Maha");
+		
+		assertThat(response.getBody().size()).isEqualTo(1);
+		assertThat(response.getBody().get(0).getName()).isEqualTo("Mahavat");
+	}
+	
+	@Test
+	public void shouldReturnOneSpecificProduct_whenFilteredWithNameCaseInSensitiveMaha() {
+		mockProductsServiceToSendBackFilteredProducts("maha");
+		
+		ResponseEntity<List<Product>> response = catlogController.getFilteredProducts("maha");
+		
+		assertThat(response.getBody().size()).isEqualTo(1);
+		assertThat(response.getBody().get(0).getName()).isEqualTo("Mahavat");
+	}
+	
+	@Test
+	public void shouldReturnEmptyList_whenFilteredWithNameWater() {
+		mockProductsServiceToSendBackFilteredProducts("water");
+		
+		ResponseEntity<List<Product>> response = catlogController.getFilteredProducts("water");
+		
+		assertThat(response.getBody().size()).isEqualTo(0);
+	}
+	
 	private void mockProductsServiceToSendBackProducts(String category) {
 
 		when(mockProductService.fetchProductsFor(category)).thenReturn(
@@ -61,6 +101,16 @@ public class CatalogControllerSpec {
 															 .filter(product -> product.getCategory().toString().equals(value))
 															 .collect(Collectors.toList()))
 						.orElseGet(() -> ProductUtility.products)
+			);
+	}
+	
+	private void mockProductsServiceToSendBackFilteredProducts(String filterBookTitle) {
+		when(mockProductService.fetchFilteredProductesFor(filterBookTitle)).thenReturn(
+				Optional.ofNullable(filterBookTitle)
+						.map(value -> ProductUtility.products.stream()
+															 .filter(product -> product.getName().toLowerCase().contains(value.toLowerCase()))
+															 .collect(Collectors.toList()))
+						.orElseGet(() -> new ArrayList<>())
 			);
 	}
 
