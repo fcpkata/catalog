@@ -2,7 +2,6 @@ package com.spring.catalog.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -16,9 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
-import com.spring.catalog.db.PrdouctDetailTemplate;
 import com.spring.catalog.model.Category;
-import com.spring.catalog.model.Price;
 import com.spring.catalog.model.Product;
 import com.spring.catalog.util.ProductUtility;
 
@@ -30,12 +27,9 @@ public class CatalogControllerTest {
 	
 	public CatalogController catlogController;
 	
-	@Mock
-	private PrdouctDetailTemplate prdouctDetailTemplate;
-	
 	@Before
 	public void setup() {		
-		catlogController = new CatalogController(mockProductService, prdouctDetailTemplate);
+		catlogController = new CatalogController(mockProductService);
 	}
 	
 
@@ -71,43 +65,38 @@ public class CatalogControllerTest {
 			);
 	}
 	
+	@Test
 	public void shoulRetrunProductDetailsWhenGetProductDetailsIsPresent() {
-		when(prdouctDetailTemplate.getProductDetailsFromDb(any())).thenReturn(getProductDetails());
-		ResponseEntity<Product> response = catlogController.getProductDetailsById("Product01");
+		
+		getAvaliableProducts();
+		ResponseEntity<Product> response = catlogController.getProductDetailsById("PD001");
 		validateResponse(response);
 	}
 
+
 	@Test
 	public void shoulRetrunDetailsPresentAsFalseWhenGetProductDetailsIsNotPresent() {
-		when(prdouctDetailTemplate.getProductDetailsFromDb(any())).thenReturn(new Product());
+		getAvaliableProducts();
 		ResponseEntity<Product> response = catlogController.getProductDetailsById("Product03");
 		assertThat(response.getStatusCodeValue()).isEqualTo(200);
 		assertNotNull(response.getBody());
 		assertThat(response.getBody().isDetailsPresent()).isEqualTo(false);
 	}
 	
+	private void getAvaliableProducts() {
+		when(mockProductService.fetchAllProducts()).thenReturn(ProductUtility.products.stream()
+															 .collect(Collectors.toList()));
+	}
+
+	
 	private void validateResponse(ResponseEntity<Product> response) {
 		assertThat(response.getStatusCodeValue()).isEqualTo(200);
 		assertNotNull(response.getBody());
-		assertThat(response.getBody().getId()).isEqualTo("Product01");
-		assertThat(response.getBody().getName()).isEqualTo("The Argumentative Indian by Amartya Sen");
-		assertThat(response.getBody().getPrice().getValue()).isEqualTo(500.02);
-		assertThat(response.getBody().getDescription()).isEqualTo("Written by the Nobel Prize winning economist Amartya Sen, this book is essentially a series of poignant essays narrating India’s history and how that history has influenced and shaped its cultural identity.");
+		assertThat(response.getBody().getId()).isEqualTo("PD001");
+		assertThat(response.getBody().getName()).isEqualTo("Sold on a Monday");
+		assertThat(response.getBody().getPrice().getValue()).isEqualTo(1200.99);
+		assertThat(response.getBody().getDescription()).isEqualTo("An unforgettable historical fiction novel by Kristina McMorris, inspired by a stunning piece of history from Depression-Era America.");
 		assertThat(response.getBody().isDetailsPresent()).isEqualTo(true);
 	}
-	
-	private Product getProductDetails() {
-		return Product.builder().id("Product01")
-				.name("The Argumentative Indian by Amartya Sen")
-				.price(Price.prepareINRPriceFor(500.02))
-				.description("Written by the Nobel Prize winning economist Amartya Sen, "
-						+ "this book is essentially a series of poignant essays narrating "
-						+ "India’s history and how that history has influenced and shaped its cultural identity.")
-				.detailsPresent(true)
-				.build();
-	}
-	
-	
-	
 	
 }

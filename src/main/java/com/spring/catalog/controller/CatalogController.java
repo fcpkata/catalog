@@ -1,5 +1,6 @@
 package com.spring.catalog.controller;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.spring.catalog.db.PrdouctDetailTemplate;
 import com.spring.catalog.model.Category;
 import com.spring.catalog.model.Product;
 
@@ -23,12 +23,10 @@ import com.spring.catalog.model.Product;
 public class CatalogController {
 
 	private ProductService productService;
-	private PrdouctDetailTemplate prdouctDetailTemplate;
 
 	@Autowired
-	public CatalogController(ProductService productService, PrdouctDetailTemplate prdouctDetailTemplate) {
+	public CatalogController(ProductService productService) {
 		this.productService = productService;
-		this.prdouctDetailTemplate = prdouctDetailTemplate;
 	}
 
 	@GetMapping(path = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -52,10 +50,23 @@ public class CatalogController {
 	@GetMapping(path = "/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Product> getProductDetailsById(@PathVariable(value = "productId") String productId) {
 
-		Product response = prdouctDetailTemplate.getProductDetailsFromDb(productId);
+		Product response = getProductDetailsFromDb(productId);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 		
+	}
+	
+	public Product getProductDetailsFromDb(String productId) {
+
+		Map<String, List<Product>> productDetails =  productService.fetchAllProducts().stream()
+				.collect(Collectors.groupingBy(Product :: getId, 
+						Collectors.toList()));
+
+		return Optional.ofNullable(productDetails.get(productId)).map( product -> {
+			Product value = product.get(0);
+			value.setDetailsPresent(true);
+			return value;
+		}).orElse(new Product());
 	}
 
 }

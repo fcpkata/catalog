@@ -39,17 +39,20 @@ public class CatalogAcceptanceTest {
 	@Test
 	public void shouldReturnOnlyHistoricalFrictionProducts() throws Exception {
 		mockMvc.perform(get("/v1/products?category="+Category.Historical_Friction)).andDo(print()).andExpect(status().isOk())
-		.andExpect(jsonPath("$.length()").value(2))
+		.andExpect(jsonPath("$.length()").value(4))
 		.andExpect(jsonPath("$.[0].category").value(Category.Historical_Friction.toString()))
 		.andExpect(jsonPath("$.[1].category").value(Category.Historical_Friction.toString()));
 	}
 	
 	@Test
 	public void shouldReturnProductsDetailsWhenCalledWithProductId() throws Exception {
-		mockMvc.perform(get("/v1/product/Product01")).andDo(print()).andExpect(status().isOk())
-		.andExpect(jsonPath("$.id").value("Product01")).andExpect(jsonPath("$.name").value("The Argumentative Indian by Amartya Sen"))
-		.andExpect(jsonPath("$.description").value("Written by the Nobel Prize winning economist Amartya Sen, this book is essentially a series of poignant essays narrating India’s history and how that history has influenced and shaped its cultural identity."))
-		.andExpect(jsonPath("$.price.value").value(500.02))
+		mockMvc.perform(get("/v1/product/PD001")).andDo(print()).andExpect(status().isOk())
+		.andExpect(jsonPath("$.id").value("PD001"))
+		.andExpect(jsonPath("$.name").value("Sold on a Monday"))
+		.andExpect(jsonPath("$.category").value(Category.Historical_Friction.toString()))
+		.andExpect(jsonPath("$.description").value("An unforgettable historical fiction novel by Kristina McMorris, inspired by a stunning piece of history from Depression-Era America."))
+		.andExpect(jsonPath("$.price.value").value(1200.99))
+		.andExpect(jsonPath("$.price.currency").value("INR"))
 		.andExpect(jsonPath("$.detailsPresent").value(true));
 
 	}
