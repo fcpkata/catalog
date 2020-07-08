@@ -25,11 +25,11 @@ public class ProductService {
 	public List<Product> fetchProductsFor(Category category) {
 		
 		return repository.fetchAllProducts().stream()
-				  .filter(validateCategory(category))
+				  .filter(validateBookCategory(category))
 				  .collect(Collectors.toList());
 	}
 	
-	private Predicate<Product> validateCategory(Category category) {
+	private Predicate<Product> validateBookCategory(Category category) {
 			
 			return product -> Optional.ofNullable(category)
 									  .map(value -> product.getCategory().equals(value))

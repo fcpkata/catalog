@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
+import com.spring.catalog.model.BookCategory;
 import com.spring.catalog.model.Category;
 import com.spring.catalog.model.Product;
 import com.spring.catalog.util.ProductUtility;
@@ -39,18 +40,18 @@ public class CatalogControllerSpec {
 		
 		ResponseEntity<List<Product>> response = catlogController.getCatalog(null);
 		
-		assertThat(response.getBody().size()).isGreaterThan(0);
+		assertThat(response.getBody().size()).isGreaterThan(2);
 	}
 	
 	
 	@Test
 	public void shouldReturnSpecificProducts_WhenInvokedWithCategory() throws Exception {
 		
-		mockProductsServiceToSendBackProducts(Category.Mystry);
+		mockProductsServiceToSendBackProducts(BookCategory.Mystry);
 		
-		ResponseEntity<List<Product>> response = catlogController.getCatalog(Category.Mystry);
+		ResponseEntity<List<Product>> response = catlogController.getCatalog(BookCategory.Mystry);
 		
-		assertThat(response.getBody().get(0).getCategory()).isEqualTo(Category.Mystry);
+		assertThat(response.getBody().get(0).getCategory()).isEqualTo(BookCategory.Mystry);
 	}
 
 	private void mockProductsServiceToSendBackProducts(Category category) {

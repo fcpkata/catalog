@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import com.spring.catalog.CatalogApplication;
-import com.spring.catalog.model.Category;
+import com.spring.catalog.model.BookCategory;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CatalogApplication.class)
@@ -30,7 +30,7 @@ public class CatalogAcceptanceTest {
 		mockMvc.perform(get("/v1/products")).andDo(print()).andExpect(status().isOk())
 		.andExpect(jsonPath("$.[0].id").value("PD001"))
 		.andExpect(jsonPath("$.[0].name").value("Sold on a Monday"))
-		.andExpect(jsonPath("$.[0].category").value(Category.Historical_Friction.toString()))
+		.andExpect(jsonPath("$.[0].category").value(BookCategory.Historical_Friction.toString()))
 		.andExpect(jsonPath("$.[0].description").value("An unforgettable historical fiction novel by Kristina McMorris, inspired by a stunning piece of history from Depression-Era America."))
 		.andExpect(jsonPath("$.[0].price.value").value(1200.99))
 		.andExpect(jsonPath("$.[0].price.currency").value("INR"));
@@ -38,10 +38,10 @@ public class CatalogAcceptanceTest {
 	
 	@Test
 	public void shouldReturnOnlyHistoricalFrictionProducts() throws Exception {
-		mockMvc.perform(get("/v1/products?category="+Category.Historical_Friction)).andDo(print()).andExpect(status().isOk())
-		.andExpect(jsonPath("$.length()").value(4))
-		.andExpect(jsonPath("$.[0].category").value(Category.Historical_Friction.toString()))
-		.andExpect(jsonPath("$.[1].category").value(Category.Historical_Friction.toString()));
+		mockMvc.perform(get("/v1/products?category="+BookCategory.Historical_Friction)).andDo(print()).andExpect(status().isOk())
+		.andExpect(jsonPath("$.length()").isNotEmpty())
+		.andExpect(jsonPath("$.[0].category").value(BookCategory.Historical_Friction.toString()))
+		.andExpect(jsonPath("$.[1].category").value(BookCategory.Historical_Friction.toString()));
 	}
 	
 	@Test
@@ -49,7 +49,7 @@ public class CatalogAcceptanceTest {
 		mockMvc.perform(get("/v1/product/PD001")).andDo(print()).andExpect(status().isOk())
 		.andExpect(jsonPath("$.id").value("PD001"))
 		.andExpect(jsonPath("$.name").value("Sold on a Monday"))
-		.andExpect(jsonPath("$.category").value(Category.Historical_Friction.toString()))
+		.andExpect(jsonPath("$.category").value(BookCategory.Historical_Friction.toString()))
 		.andExpect(jsonPath("$.description").value("An unforgettable historical fiction novel by Kristina McMorris, inspired by a stunning piece of history from Depression-Era America."))
 		.andExpect(jsonPath("$.price.value").value(1200.99))
 		.andExpect(jsonPath("$.price.currency").value("INR"))
@@ -69,4 +69,5 @@ public class CatalogAcceptanceTest {
 		mockMvc.perform(requestBuilder).andDo(print()).andExpect(status().isNotFound());
 
 	}
+
 }

@@ -12,7 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.spring.catalog.controller.ProductService;
-import com.spring.catalog.model.Category;
+import com.spring.catalog.model.BookCategory;
+import com.spring.catalog.model.ElectronicsCategory;
 import com.spring.catalog.model.Product;
 import com.spring.catalog.repository.Repository;
 import com.spring.catalog.util.ProductUtility;
@@ -34,12 +35,18 @@ public class ProductServiceSpec {
 	@Test
 	public void fetchesProductsWhenCategoryIsNull() {
 		List<Product> products = productService.fetchProductsFor(null);
-		assertThat(products.size()).isGreaterThan(0);
+		assertThat(products.size()).isGreaterThan(2);
 	}
 
 	@Test
 	public void fetchesFilteredProductsWhenValidCategoryIsPassed() throws Exception {
-		List<Product> products = productService.fetchProductsFor(Category.Mystry);
-		assertThat(products.get(0).getCategory()).isEqualTo(Category.Mystry);
+		List<Product> products = productService.fetchProductsFor(BookCategory.Mystry);
+		assertThat(products.get(0).getCategory()).isEqualTo(BookCategory.Mystry);
+	}
+	
+	@Test
+	public void fetchesFilteredProductsWhenADifferentCategoryIsPassed() throws Exception {
+		List<Product> products = productService.fetchProductsFor(ElectronicsCategory.Laptop);
+		assertThat(products.get(0).getCategory()).isEqualTo(ElectronicsCategory.Laptop);
 	}
 }
