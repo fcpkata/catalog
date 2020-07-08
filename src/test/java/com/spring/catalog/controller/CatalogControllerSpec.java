@@ -15,7 +15,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
 import com.spring.catalog.model.BookCategory;
-import com.spring.catalog.model.Category;
 import com.spring.catalog.model.Product;
 import com.spring.catalog.util.ProductUtility;
 
@@ -47,19 +46,19 @@ public class CatalogControllerSpec {
 	@Test
 	public void shouldReturnSpecificProducts_WhenInvokedWithCategory() throws Exception {
 		
-		mockProductsServiceToSendBackProducts(BookCategory.Mystry);
+		mockProductsServiceToSendBackProducts(BookCategory.Mystry.toString());
 		
-		ResponseEntity<List<Product>> response = catlogController.getCatalog(BookCategory.Mystry);
+		ResponseEntity<List<Product>> response = catlogController.getCatalog(BookCategory.Mystry.toString());
 		
 		assertThat(response.getBody().get(0).getCategory()).isEqualTo(BookCategory.Mystry);
 	}
 
-	private void mockProductsServiceToSendBackProducts(Category category) {
+	private void mockProductsServiceToSendBackProducts(String category) {
 
 		when(mockProductService.fetchProductsFor(category)).thenReturn(
 				Optional.ofNullable(category)
 						.map(value -> ProductUtility.products.stream()
-															 .filter(product -> product.getCategory().equals(value))
+															 .filter(product -> product.getCategory().toString().equals(value))
 															 .collect(Collectors.toList()))
 						.orElseGet(() -> ProductUtility.products)
 			);

@@ -40,13 +40,13 @@ public class ProductServiceSpec {
 
 	@Test
 	public void fetchesFilteredProductsWhenValidCategoryIsPassed() throws Exception {
-		List<Product> products = productService.fetchProductsFor(BookCategory.Mystry);
+		List<Product> products = productService.fetchProductsFor(BookCategory.Mystry.toString());
 		assertThat(products.get(0).getCategory()).isEqualTo(BookCategory.Mystry);
 	}
 	
 	@Test
 	public void fetchesFilteredProductsWhenADifferentCategoryIsPassed() throws Exception {
-		List<Product> products = productService.fetchProductsFor(ElectronicsCategory.Laptop);
+		List<Product> products = productService.fetchProductsFor(ElectronicsCategory.Laptop.toString());
 		assertThat(products.get(0).getCategory()).isEqualTo(ElectronicsCategory.Laptop);
 	}
 }

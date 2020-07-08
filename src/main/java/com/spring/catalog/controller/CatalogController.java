@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.spring.catalog.model.Category;
 import com.spring.catalog.model.Product;
 
 @RestController
@@ -29,7 +28,7 @@ public class CatalogController {
 	}
 
 	@GetMapping(path = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Product>> getCatalog(@RequestParam(name = "category", required = false) Category category) {
+	public ResponseEntity<List<Product>> getCatalog(@RequestParam(name = "category", required = false) String category) {
 		
 		ResponseEntity<List<Product>> response = new ResponseEntity<>(productService.fetchProductsFor(category), HttpStatus.OK);
 		return response;

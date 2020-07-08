@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.spring.catalog.model.Category;
 import com.spring.catalog.model.Product;
 import com.spring.catalog.repository.Repository;
 
@@ -22,17 +21,17 @@ public class ProductService {
 		this.repository = repository;
 	}
 
-	public List<Product> fetchProductsFor(Category category) {
+	public List<Product> fetchProductsFor(String category) {
 		
 		return repository.fetchAllProducts().stream()
 				  .filter(validateBookCategory(category))
 				  .collect(Collectors.toList());
 	}
 	
-	private Predicate<Product> validateBookCategory(Category category) {
+	private Predicate<Product> validateBookCategory(String category) {
 			
 			return product -> Optional.ofNullable(category)
-									  .map(value -> product.getCategory().equals(value))
+									  .map(value -> product.getCategory().toString().equals(value))
 									  .orElse(true);
 		}
 
