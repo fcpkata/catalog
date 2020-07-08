@@ -5,20 +5,17 @@ import java.util.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @ToString
 public class Price {
 	private double value;
 	private Currency currency;
-	
-	@Override
-	public String toString() {
-		return "Price =" + value + " " + currency;
-	}
 	
 	public static Price prepareINRPriceFor(double value) {
 		return Price.builder().currency(Currency.getInstance("INR")).value(value).build();

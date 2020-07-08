@@ -72,6 +72,7 @@ public class CatalogAcceptanceTest {
 		.andReturn();
 		
 		List<Product> products = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Product>>() {});
+		assertThat(products).isNotEmpty();
 		for(Product product: products) {
 			assertThat(product.getMetadata().getMetadata().get("genre")).isEqualTo(genre);
 		}

@@ -42,7 +42,7 @@ public class MockProductRepository implements ProductRepository {
 				.metadata(
 						new ProductMetadata()
 							.add("genre", "Historical Fiction"))
-	 			.description("A compelling, emotionally gripping”* novel of historical fiction—perfect for readers of America’s First Daughter")
+	 			.description("A compelling, emotionally gripping novel of historical fiction. Perfect for readers of Americas First Daughter")
 	 			.price(Price.prepareINRPriceFor(1000.80))
 	 			.build());
 		products.add(Product.builder()
@@ -65,7 +65,7 @@ public class MockProductRepository implements ProductRepository {
 							.add("genre", "Historical Fiction"))
 				.description("Written by the Nobel Prize winning economist Amartya Sen, "
 						+ "this book is essentially a series of poignant essays narrating "
-						+ "India’s history and how that history has influenced and shaped its cultural identity.")
+						+ "Indias history and how that history has influenced and shaped its cultural identity.")
 				.build());
 		products.add(Product.builder()
 				.id("PD005")
@@ -76,7 +76,7 @@ public class MockProductRepository implements ProductRepository {
 							.add("genre", "Historical Fiction"))
 				.price(Price.prepareINRPriceFor(400.02))
 				.description("This book is considered a useful source of history for aspirants to the Indian civil services. "
-						+ "Basham’s popular work covers the period between ancient India and the arrival of the Muslims")
+						+ "Bashams popular work covers the period between ancient India and the arrival of the Muslims")
 				.build());
 		products.add(Product.builder()
 				.id("PD006").name("Acer Swift 3")
