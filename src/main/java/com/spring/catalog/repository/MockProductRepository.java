@@ -1,6 +1,7 @@
 package com.spring.catalog.repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -29,10 +30,18 @@ public class MockProductRepository implements ProductRepository {
 				.name("Sold on a Monday")
 				.description("An unforgettable historical fiction novel by Kristina McMorris, inspired by a stunning piece of history from Depression-Era America.")
 				.price(1200)
+				.shippingPrice(0)
+				.rating(4)
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
 						new ProductMetadata()
-							.add("genre", "Historical Fiction"))
+							.add("genre", "Historical Fiction")
+							.add("Author", "Kristina McMorris")
+						)
+				.imageLinks(Arrays.asList(
+						"https://imagecdn.com/PD001-small.png",
+						"https://imagecdn.com/PD001-large.png"
+						))
 	 			.build());
 		products.add(Product.builder()
 				.id("PD002")
@@ -40,9 +49,17 @@ public class MockProductRepository implements ProductRepository {
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
 						new ProductMetadata()
-							.add("genre", "Historical Fiction"))
+							.add("genre", "Historical Fiction")
+							.add("Author", "Amy Belding Brown")
+						)
 	 			.description("A compelling, emotionally gripping novel of historical fiction. Perfect for readers of Americas First Daughter")
 	 			.price(1000)
+	 			.shippingPrice(0)
+	 			.rating(4)
+	 			.imageLinks(Arrays.asList(
+						"https://imagecdn.com/PD002-small.png",
+						"https://imagecdn.com/PD002-large.png"
+						))
 	 			.build());
 		products.add(Product.builder()
 				.id("PD003")
@@ -50,21 +67,36 @@ public class MockProductRepository implements ProductRepository {
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
 						new ProductMetadata()
-							.add("genre", "Mystery"))
+							.add("genre", "Mystery")
+							.add("Author", "Lauren K. Denton"))
 	 			.description("In the South, family is always more complicated than it seems.")
 	 			.price(900)
+	 			.shippingPrice(0)
+	 			.rating(4)
+	 			.imageLinks(Arrays.asList(
+						"https://imagecdn.com/PD003-small.png",
+						"https://imagecdn.com/PD003-large.png"
+						))
 	 			.build());
 		products.add(Product.builder()
 				.id("PD004")
 				.name("The Argumentative Indian by Amartya Sen")
 				.price(500)
+				.shippingPrice(0)
+				.rating(4)
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
 						new ProductMetadata()
-							.add("genre", "Historical Fiction"))
+							.add("genre", "Historical Fiction")
+							.add("Author", "Amartya Sen")
+						)
 				.description("Written by the Nobel Prize winning economist Amartya Sen, "
 						+ "this book is essentially a series of poignant essays narrating "
 						+ "Indias history and how that history has influenced and shaped its cultural identity.")
+				.imageLinks(Arrays.asList(
+						"https://imagecdn.com/PD004-small.png",
+						"https://imagecdn.com/PD004-large.png"
+						))
 				.build());
 		products.add(Product.builder()
 				.id("PD005")
@@ -72,10 +104,18 @@ public class MockProductRepository implements ProductRepository {
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
 						new ProductMetadata()
-							.add("genre", "Historical Fiction"))
+							.add("genre", "Historical Fiction")
+							.add("Author", "A L Basham")
+						)
 				.price(400)
+				.shippingPrice(0)
+				.rating(4)
 				.description("This book is considered a useful source of history for aspirants to the Indian civil services. "
 						+ "Bashams popular work covers the period between ancient India and the arrival of the Muslims")
+				.imageLinks(Arrays.asList(
+						"https://imagecdn.com/PD005-small.png",
+						"https://imagecdn.com/PD005-large.png"
+						))
 				.build());
 		products.add(Product.builder()
 				.id("PD006").name("Acer Swift 3")
@@ -85,6 +125,12 @@ public class MockProductRepository implements ProductRepository {
 							.add("type", "Laptop"))
 	 			.description("Acer Swift 3 Thin & Light Laptop, 14 inch Full HD IPS")
 	 			.price(67900)
+	 			.shippingPrice(1000)
+	 			.rating(3)
+	 			.imageLinks(Arrays.asList(
+						"https://imagecdn.com/PD006-small.png",
+						"https://imagecdn.com/PD006-large.png"
+						))
 	 			.build());
 		products.add(Product.builder()
 				.id("PD007")
@@ -95,30 +141,48 @@ public class MockProductRepository implements ProductRepository {
 							.add("type", "TV"))
 	 			.description("SAMSUNG 65-inch Class QLED Q70T Series - 4K UHD Dual LED Quantum HDR Smart TV")
 	 			.price(98600)
+	 			.shippingPrice(10000)
+	 			.rating(5)
+	 			.imageLinks(Arrays.asList(
+						"https://imagecdn.com/PD007-small.png",
+						"https://imagecdn.com/PD007-large.png"
+						))
 	 			.build());
 		products.add(Product.builder()
 				.id("PD008")
 				.name("Classmate")
 				.description("100-pages")
 				.price(50)
+				.shippingPrice(0)
+				.rating(4)
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
 						new ProductMetadata()
 							.add("type", "Stationery")
 							.add("pages", "100")
 						)
+				.imageLinks(Arrays.asList(
+						"https://imagecdn.com/PD008-small.png",
+						"https://imagecdn.com/PD008-large.png"
+						))
 				.build());
 		products.add(Product.builder()
 				.id("PD009")
 				.name("Samsung")
 				.description("Model-S10")
-				.price(1000)
+				.price(96000)
+				.shippingPrice(4999)
+				.rating(3)
 				.category(CategoryRepository.PHONE.getCategory())
 				.metadata(
 						new ProductMetadata()
 							.add("type", "Smart Phone")
 							.add("color", "Black")
 						)
+				.imageLinks(Arrays.asList(
+						"https://imagecdn.com/PD009-small.png",
+						"https://imagecdn.com/PD009-large.png"
+						))
 				.build());
 
 	}

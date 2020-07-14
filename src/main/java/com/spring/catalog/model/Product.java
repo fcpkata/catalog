@@ -1,5 +1,6 @@
 package com.spring.catalog.model;
 
+import java.util.List;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -22,8 +23,10 @@ public class Product {
 	private String description;
 	private ProductMetadata metadata;
 	private int price;
-	private boolean detailsPresent;
+	private int shippingPrice;
+	private int rating;
 	private Category category;
+	private List<String> imageLinks;
 	
 	public boolean hasMetadata(Map<String, String> metaDataFilters) {
 		return metadata.containsAll(metaDataFilters);
