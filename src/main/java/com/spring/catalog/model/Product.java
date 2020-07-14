@@ -21,7 +21,7 @@ public class Product {
 	private String name;
 	private String description;
 	private ProductMetadata metadata;
-	private Price price;
+	private int price;
 	private boolean detailsPresent;
 	private Category category;
 	

@@ -85,8 +85,8 @@ public class CatalogAcceptanceTest {
 		.andExpect(jsonPath("$.name").value("Sold on a Monday"))
 		.andExpect(jsonPath("$.category.id").value("books"))
 		.andExpect(jsonPath("$.description").value("An unforgettable historical fiction novel by Kristina McMorris, inspired by a stunning piece of history from Depression-Era America."))
-		.andExpect(jsonPath("$.price.value").value(1200.99))
-		.andExpect(jsonPath("$.price.currency").value("INR"));
+		.andExpect(jsonPath("$.price").value(1200))
+		;
 
 	}
 	
