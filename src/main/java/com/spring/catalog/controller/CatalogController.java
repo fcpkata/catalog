@@ -49,7 +49,7 @@ public class CatalogController {
 		return response;
 	}
 	
-	@GetMapping(path = "/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/products/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Product> getProductDetailsById(@PathVariable(value = "productId") String productId) {
 
 		Product response = catalogService.getProduct(productId);

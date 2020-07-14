@@ -2,12 +2,14 @@ package com.spring.catalog.repository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
 import com.spring.catalog.model.Product;
-import com.spring.catalog.model.ProductMetadata;
 
 @Component
 public class MockProductRepository implements ProductRepository {
@@ -34,10 +36,7 @@ public class MockProductRepository implements ProductRepository {
 				.rating(4)
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
-						new ProductMetadata()
-							.add("genre", "Historical Fiction")
-							.add("Author", "Kristina McMorris")
-						)
+						constructBook("Kristina McMorris", "Historical Fiction"))
 				.imageLinks(Arrays.asList(
 						"https://imagecdn.com/PD001-small.png",
 						"https://imagecdn.com/PD001-large.png"
@@ -48,10 +47,7 @@ public class MockProductRepository implements ProductRepository {
 				.name("Flight of the Sparrow")
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
-						new ProductMetadata()
-							.add("genre", "Historical Fiction")
-							.add("Author", "Amy Belding Brown")
-						)
+							constructBook("Amy Belding Brown", "Historical Fiction"))
 	 			.description("A compelling, emotionally gripping novel of historical fiction. Perfect for readers of Americas First Daughter")
 	 			.price(1000)
 	 			.shippingPrice(0)
@@ -66,9 +62,7 @@ public class MockProductRepository implements ProductRepository {
 				.name("The Hideaway")
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
-						new ProductMetadata()
-							.add("genre", "Mystery")
-							.add("Author", "Lauren K. Denton"))
+							constructBook("Lauren K. Denton", "Mystery"))
 	 			.description("In the South, family is always more complicated than it seems.")
 	 			.price(900)
 	 			.shippingPrice(0)
@@ -86,10 +80,7 @@ public class MockProductRepository implements ProductRepository {
 				.rating(4)
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
-						new ProductMetadata()
-							.add("genre", "Historical Fiction")
-							.add("Author", "Amartya Sen")
-						)
+						constructBook("Amartya Sen", "Historical Fiction"))
 				.description("Written by the Nobel Prize winning economist Amartya Sen, "
 						+ "this book is essentially a series of poignant essays narrating "
 						+ "Indias history and how that history has influenced and shaped its cultural identity.")
@@ -103,10 +94,7 @@ public class MockProductRepository implements ProductRepository {
 				.name("The Wonder That Was India by A L Basham")
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
-						new ProductMetadata()
-							.add("genre", "Historical Fiction")
-							.add("Author", "A L Basham")
-						)
+						constructBook("A L Basham", "Historical Fiction"))
 				.price(400)
 				.shippingPrice(0)
 				.rating(4)
@@ -121,8 +109,7 @@ public class MockProductRepository implements ProductRepository {
 				.id("PD006").name("Acer Swift 3")
 				.category(CategoryRepository.ELECTRONICS.getCategory())
 				.metadata(
-						new ProductMetadata()
-							.add("type", "Laptop"))
+						Collections.singletonMap("type", "Laptop"))
 	 			.description("Acer Swift 3 Thin & Light Laptop, 14 inch Full HD IPS")
 	 			.price(67900)
 	 			.shippingPrice(1000)
@@ -137,8 +124,7 @@ public class MockProductRepository implements ProductRepository {
 				.name("SAMSUNG 65-inch")
 				.category(CategoryRepository.ELECTRONICS.getCategory())
 				.metadata(
-						new ProductMetadata()
-							.add("type", "TV"))
+						Collections.singletonMap("type", "TV"))
 	 			.description("SAMSUNG 65-inch Class QLED Q70T Series - 4K UHD Dual LED Quantum HDR Smart TV")
 	 			.price(98600)
 	 			.shippingPrice(10000)
@@ -157,10 +143,10 @@ public class MockProductRepository implements ProductRepository {
 				.rating(4)
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
-						new ProductMetadata()
-							.add("type", "Stationery")
-							.add("pages", "100")
-						)
+						new HashMap<String, String>() {{
+							put("type", "Stationery");
+							put("pages", "100");
+						}})
 				.imageLinks(Arrays.asList(
 						"https://imagecdn.com/PD008-small.png",
 						"https://imagecdn.com/PD008-large.png"
@@ -175,10 +161,10 @@ public class MockProductRepository implements ProductRepository {
 				.rating(3)
 				.category(CategoryRepository.PHONE.getCategory())
 				.metadata(
-						new ProductMetadata()
-							.add("type", "Smart Phone")
-							.add("color", "Black")
-						)
+						new HashMap<String, String>() {{
+							put("type", "Smart Phone");
+							put("color", "Black");
+						}})
 				.imageLinks(Arrays.asList(
 						"https://imagecdn.com/PD009-small.png",
 						"https://imagecdn.com/PD009-large.png"
@@ -186,4 +172,11 @@ public class MockProductRepository implements ProductRepository {
 				.build());
 
 	}
-}
+	
+	private Map<String, String> constructBook(String author, String genre) {
+		HashMap<String, String> hashMap = new HashMap<>();
+		hashMap.put("author", author);
+		hashMap.put("genre", genre);
+		return hashMap;
+	}
+ }
