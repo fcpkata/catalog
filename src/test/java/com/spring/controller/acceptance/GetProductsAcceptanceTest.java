@@ -74,4 +74,5 @@ public class GetProductsAcceptanceTest {
 			assertThat(product.getMetadata().get("genre")).isEqualTo(genre);
 		}
 	}
+	
 }
