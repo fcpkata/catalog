@@ -170,6 +170,54 @@ public class MockProductRepository implements ProductRepository {
 						"https://imagecdn.com/PD009-large.png"
 						))
 				.build());
+		
+		products.add(Product.builder()
+				.id("PD010")
+				.name("Algorithms")
+				.category(CategoryRepository.BOOKS.getCategory())
+				.metadata(
+						constructBook("Cormen", "Technical"))
+				.price(400)
+				.shippingPrice(0)
+				.rating(4)
+				.description("This book is about algorithms.")
+				.imageLinks(Arrays.asList(
+						"https://imagecdn.com/PD005-small.png",
+						"https://imagecdn.com/PD005-large.png"
+						))
+				.build());
+		
+		products.add(Product.builder()
+				.id("PD011")
+				.name("The Pragmatic Programmer")
+				.category(CategoryRepository.BOOKS.getCategory())
+				.metadata(
+						constructBook("Kent Beck", "Technical"))
+				.price(400)
+				.shippingPrice(0)
+				.rating(4)
+				.description("This book is about how to be practical while programming.")
+				.imageLinks(Arrays.asList(
+						"https://imagecdn.com/PD005-small.png",
+						"https://imagecdn.com/PD005-large.png"
+						))
+				.build());
+		
+		products.add(Product.builder()
+				.id("PD012")
+				.name("CleanCode")
+				.category(CategoryRepository.BOOKS.getCategory())
+				.metadata(
+						constructBook("Robert C Martin", "Technical"))
+				.price(400)
+				.shippingPrice(0)
+				.rating(4)
+				.description("This book is about how to write clean code.")
+				.imageLinks(Arrays.asList(
+						"https://imagecdn.com/PD005-small.png",
+						"https://imagecdn.com/PD005-large.png"
+						))
+				.build());
 
 	}
 	

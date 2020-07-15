@@ -57,7 +57,7 @@ public class GetProductsAcceptanceTest {
 		List<Product> products = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Product>>() {});
 		
 		assertThat(products).isNotEmpty();
-		assertThat(products.size()).isEqualTo(9);
+		assertThat(products.size()).isEqualTo(12);
 	}
 	
 	@Test
@@ -74,5 +74,58 @@ public class GetProductsAcceptanceTest {
 			assertThat(product.getMetadata().get("genre")).isEqualTo(genre);
 		}
 	}
+	
+	@Test
+	public void shouldReturnProductsMatchingTheName() throws Exception {
+		String name = "Programmer";
+		MvcResult result = mockMvc.perform(get("/v1/products?name=" + name))
+			.andDo(print())
+			.andExpect(status().isOk())
+		.andReturn();
+		
+		List<Product> products = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Product>>() {});
+		assertThat(products).isNotEmpty();
+		assertThat(products.get(0).getName()).isEqualTo("The Pragmatic Programmer");
+	}
+	
+	@Test
+	public void shouldReturnProductsMatchingThePartialName() throws Exception {
+		String name = "Code";
+		MvcResult result = mockMvc.perform(get("/v1/products?name=" + name))
+			.andDo(print())
+			.andExpect(status().isOk())
+		.andReturn();
+		
+		List<Product> products = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Product>>() {});
+		assertThat(products).isNotEmpty();
+		assertThat(products.get(0).getName()).isEqualTo("CleanCode");
+	}
+	
+	@Test
+	public void shouldReturnProductsMatchingTheCaseInsensitiveName() throws Exception {
+		String name = "code";
+		MvcResult result = mockMvc.perform(get("/v1/products?name=" + name))
+			.andDo(print())
+			.andExpect(status().isOk())
+		.andReturn();
+		
+		List<Product> products = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Product>>() {});
+		assertThat(products).isNotEmpty();
+		assertThat(products.get(0).getName()).isEqualTo("CleanCode");
+	}
+	
+	@Test
+	public void shouldReturnEmptyProductsMatchingTheInvalidName() throws Exception {
+		String name = "water";
+		MvcResult result = mockMvc.perform(get("/v1/products?name=" + name))
+			.andDo(print())
+			.andExpect(status().isOk())
+		.andReturn();
+		
+		List<Product> products = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Product>>() {});
+		assertThat(products).isEmpty();
+	}
+	
+	
 	
 }
