@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,9 +43,9 @@ public class CatalogControllerTest {
 	public void shouldReturnSingleProduct() {
 		Product product = Product.builder().build();
 		Mockito.when(catalogService.getProduct("PD001"))
-			.thenReturn(product);
+			.thenReturn(Optional.of(product));
 		
-		ResponseEntity<Product> response = catlogController.getProductDetailsById("PD001");
+		ResponseEntity<Optional<Product>> response = catlogController.getProductDetailsById("PD001");
 		
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isEqualTo(product);

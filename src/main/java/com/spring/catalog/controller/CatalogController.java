@@ -3,6 +3,7 @@ package com.spring.catalog.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,10 +51,11 @@ public class CatalogController {
 	}
 	
 	@GetMapping(path = "/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Product> getProductDetailsById(@PathVariable(value = "productId") String productId) {
+	public ResponseEntity<Optional<Product>> getProductDetailsById(@PathVariable(value = "productId") String productId) {
 
-		Product response = catalogService.getProduct(productId);
+		Optional<Product> response = catalogService.getProduct(productId);
 
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return response.map(product -> new ResponseEntity<>(response, HttpStatus.OK))
+				.orElse(new ResponseEntity<>(Optional.of(new Product()), HttpStatus.NOT_FOUND));
 	}
 }

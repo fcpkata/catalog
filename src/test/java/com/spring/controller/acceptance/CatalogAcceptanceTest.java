@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +90,6 @@ public class CatalogAcceptanceTest {
 	}
 	
 	@Test
-	@Ignore("Fix this with proper 404 error")
 	public void shouldReturnsDetailsPresentAsFalseWhenCalledWithProductId() throws Exception {
 		mockMvc.perform(get("/v1/product/Product03")).andDo(print()).andExpect(status().isNotFound());
 	}
