@@ -32,7 +32,7 @@ public class CatalogControllerTest {
 		Product product = Product.builder().build();
 		Mockito.when(catalogService.getProducts(Mockito.any(FilterCriteria.class))).thenReturn(Arrays.asList(product));
 		
-		ResponseEntity<List<Product>> response = catlogController.getCatalog(null, null);
+		ResponseEntity<List<Product>> response = catlogController.getCatalog(null, null, null);
 		
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody().get(0)).isEqualTo(product);

@@ -33,7 +33,8 @@ public class CatalogController {
 	@GetMapping(path = "/products" )
 	public ResponseEntity<List<Product>> getCatalog(
 			@RequestParam(name= "category", required = false) String categoryId,
-			@RequestParam(name= "genre", required = false) String genre) {
+			@RequestParam(name= "genre", required = false) String genre,
+			@RequestParam(name= "name", required = false) String name) {
 		Map<String, String> metadata = new HashMap<>();
 		if(!StringUtils.isEmpty(genre)) {
 			metadata.put("genre", genre);
@@ -41,6 +42,7 @@ public class CatalogController {
 		FilterCriteria criteria = FilterCriteria.builder()
 				.categoryId(categoryId)
 				.metaDataFilters(metadata)
+				.name(name)
 				.build();
 		
 		List<Product> products = catalogService.getProducts(criteria);
@@ -49,7 +51,7 @@ public class CatalogController {
 		return response;
 	}
 	
-	@GetMapping(path = "/product/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/products/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Product> getProductDetailsById(@PathVariable(value = "productId") String productId) {
 
 		Product response = catalogService.getProduct(productId);

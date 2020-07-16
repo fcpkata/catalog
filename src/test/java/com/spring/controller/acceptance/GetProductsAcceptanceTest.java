@@ -3,13 +3,11 @@ package com.spring.controller.acceptance;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +26,7 @@ import com.spring.catalog.repository.CategoryRepository;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CatalogApplication.class)
 @AutoConfigureMockMvc
-public class CatalogAcceptanceTest {
+public class GetProductsAcceptanceTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -60,7 +57,7 @@ public class CatalogAcceptanceTest {
 		List<Product> products = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Product>>() {});
 		
 		assertThat(products).isNotEmpty();
-		assertThat(products.size()).isEqualTo(9);
+		assertThat(products.size()).isEqualTo(12);
 	}
 	
 	@Test
@@ -74,31 +71,61 @@ public class CatalogAcceptanceTest {
 		List<Product> products = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Product>>() {});
 		assertThat(products).isNotEmpty();
 		for(Product product: products) {
-			assertThat(product.getMetadata().getMetadata().get("genre")).isEqualTo(genre);
+			assertThat(product.getMetadata().get("genre")).isEqualTo(genre);
 		}
 	}
 	
 	@Test
-	public void shouldReturnProductsDetailsWhenCalledWithProductId() throws Exception {
-		mockMvc.perform(get("/v1/product/PD001")).andDo(print()).andExpect(status().isOk())
-		.andExpect(jsonPath("$.id").value("PD001"))
-		.andExpect(jsonPath("$.name").value("Sold on a Monday"))
-		.andExpect(jsonPath("$.category.id").value("books"))
-		.andExpect(jsonPath("$.description").value("An unforgettable historical fiction novel by Kristina McMorris, inspired by a stunning piece of history from Depression-Era America."))
-		.andExpect(jsonPath("$.price.value").value(1200.99))
-		.andExpect(jsonPath("$.price.currency").value("INR"));
-
+	public void shouldReturnProductsMatchingTheName() throws Exception {
+		String name = "Programmer";
+		MvcResult result = mockMvc.perform(get("/v1/products?name=" + name))
+			.andDo(print())
+			.andExpect(status().isOk())
+		.andReturn();
+		
+		List<Product> products = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Product>>() {});
+		assertThat(products).isNotEmpty();
+		assertThat(products.get(0).getName()).isEqualTo("The Pragmatic Programmer");
 	}
 	
 	@Test
-	@Ignore("Fix this with proper 404 error")
-	public void shouldReturnsDetailsPresentAsFalseWhenCalledWithProductId() throws Exception {
-		mockMvc.perform(get("/v1/product/Product03")).andDo(print()).andExpect(status().isNotFound());
+	public void shouldReturnProductsMatchingThePartialName() throws Exception {
+		String name = "Code";
+		MvcResult result = mockMvc.perform(get("/v1/products?name=" + name))
+			.andDo(print())
+			.andExpect(status().isOk())
+		.andReturn();
+		
+		List<Product> products = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Product>>() {});
+		assertThat(products).isNotEmpty();
+		assertThat(products.get(0).getName()).isEqualTo("CleanCode");
 	}
 	
 	@Test
-	public void shouldReturns404_WhenCalledWithProductIdIsNull() throws Exception {
-		MockHttpServletRequestBuilder requestBuilder = get("/v1/product").queryParam("productId", "");
-		mockMvc.perform(requestBuilder).andDo(print()).andExpect(status().isNotFound());
+	public void shouldReturnProductsMatchingTheCaseInsensitiveName() throws Exception {
+		String name = "code";
+		MvcResult result = mockMvc.perform(get("/v1/products?name=" + name))
+			.andDo(print())
+			.andExpect(status().isOk())
+		.andReturn();
+		
+		List<Product> products = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Product>>() {});
+		assertThat(products).isNotEmpty();
+		assertThat(products.get(0).getName()).isEqualTo("CleanCode");
 	}
+	
+	@Test
+	public void shouldReturnEmptyProductsMatchingTheInvalidName() throws Exception {
+		String name = "water";
+		MvcResult result = mockMvc.perform(get("/v1/products?name=" + name))
+			.andDo(print())
+			.andExpect(status().isOk())
+		.andReturn();
+		
+		List<Product> products = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Product>>() {});
+		assertThat(products).isEmpty();
+	}
+	
+	
+	
 }

@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 @Getter
 public class FilterCriteria {
-
+	private String name;
 	private String categoryId;
 	private Map<String,String> metaDataFilters;
 	
