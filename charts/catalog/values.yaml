@@ -58,7 +58,7 @@ resources:
   requests:
     cpu: 50m
     memory: 512Mi
-probePath: /catalog/v1/products
+probePath: /actuator/health
 livenessProbe:
   initialDelaySeconds: 60
   periodSeconds: 10
