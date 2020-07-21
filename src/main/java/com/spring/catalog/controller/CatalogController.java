@@ -20,7 +20,7 @@ import com.spring.catalog.model.Product;
 import com.spring.catalog.service.CatalogService;
 
 @RestController
-@RequestMapping(value = "/v1", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/catalog/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CatalogController {
 	
 	private CatalogService catalogService;

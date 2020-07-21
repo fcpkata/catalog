@@ -27,7 +27,7 @@ public class GetProductDetailsAcceptanceTest {
 	@Test
 	public void shouldReturnProductsDetailsWhenCalledWithProductId() throws Exception {
 		String productId = "PD001";
-		mockMvc.perform(get("/v1/products/" + productId))
+		mockMvc.perform(get("/catalog/v1/products/" + productId))
 			.andDo(print())
 			.andExpect(status()
 				.isOk())
@@ -47,7 +47,7 @@ public class GetProductDetailsAcceptanceTest {
 	
 	@Test
 	public void shouldReturnsDetailsPresentAsFalseWhenCalledWithProductId() throws Exception {
-		mockMvc.perform(get("/v1/products/123"))
+		mockMvc.perform(get("/catalog/v1/products/123"))
 		.andDo(print())
 		.andExpect(status().isNotFound())
 		.andExpect(MockMvcResultMatchers.content().string("Product Not Found"))

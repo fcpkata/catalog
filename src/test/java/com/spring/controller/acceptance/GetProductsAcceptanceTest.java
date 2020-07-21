@@ -35,7 +35,7 @@ public class GetProductsAcceptanceTest {
 
 	@Test
 	public void shouldReturnProductsCatalogWhenCalledWithBooksCategory() throws Exception {
-		MvcResult result = mockMvc.perform(get("/v1/products?category=books"))
+		MvcResult result = mockMvc.perform(get("/catalog/v1/products?category=books"))
 				.andDo(print())
 				.andExpect(status().isOk())
 		.andReturn();
@@ -49,7 +49,7 @@ public class GetProductsAcceptanceTest {
 	
 	@Test
 	public void shouldReturnAllProductsCatalogsWhenCalledWithNoInput() throws Exception {
-		MvcResult result = mockMvc.perform(get("/v1/products"))
+		MvcResult result = mockMvc.perform(get("/catalog/v1/products"))
 			.andDo(print())
 			.andExpect(status().isOk())
 		.andReturn();
@@ -63,7 +63,7 @@ public class GetProductsAcceptanceTest {
 	@Test
 	public void shouldReturnOnlyHistoricalFrictionProducts() throws Exception {
 		String genre = "Historical Fiction";
-		MvcResult result = mockMvc.perform(get("/v1/products?category=books&genre=" + genre))
+		MvcResult result = mockMvc.perform(get("/catalog/v1/products?category=books&genre=" + genre))
 			.andDo(print())
 			.andExpect(status().isOk())
 		.andReturn();
@@ -78,7 +78,7 @@ public class GetProductsAcceptanceTest {
 	@Test
 	public void shouldReturnProductsMatchingTheName() throws Exception {
 		String name = "Programmer";
-		MvcResult result = mockMvc.perform(get("/v1/products?name=" + name))
+		MvcResult result = mockMvc.perform(get("/catalog/v1/products?name=" + name))
 			.andDo(print())
 			.andExpect(status().isOk())
 		.andReturn();
@@ -91,7 +91,7 @@ public class GetProductsAcceptanceTest {
 	@Test
 	public void shouldReturnProductsMatchingThePartialName() throws Exception {
 		String name = "Code";
-		MvcResult result = mockMvc.perform(get("/v1/products?name=" + name))
+		MvcResult result = mockMvc.perform(get("/catalog/v1/products?name=" + name))
 			.andDo(print())
 			.andExpect(status().isOk())
 		.andReturn();
@@ -104,7 +104,7 @@ public class GetProductsAcceptanceTest {
 	@Test
 	public void shouldReturnProductsMatchingTheCaseInsensitiveName() throws Exception {
 		String name = "code";
-		MvcResult result = mockMvc.perform(get("/v1/products?name=" + name))
+		MvcResult result = mockMvc.perform(get("/catalog/v1/products?name=" + name))
 			.andDo(print())
 			.andExpect(status().isOk())
 		.andReturn();
@@ -117,7 +117,7 @@ public class GetProductsAcceptanceTest {
 	@Test
 	public void shouldReturnEmptyProductsMatchingTheInvalidName() throws Exception {
 		String name = "water";
-		MvcResult result = mockMvc.perform(get("/v1/products?name=" + name))
+		MvcResult result = mockMvc.perform(get("/catalog/v1/products?name=" + name))
 			.andDo(print())
 			.andExpect(status().isOk())
 		.andReturn();
