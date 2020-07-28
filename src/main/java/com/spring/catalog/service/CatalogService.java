@@ -29,7 +29,7 @@ public class CatalogService {
 		List<Product> filteredProducts = filterProducts(allProducts, criteria);
 
 		filteredProducts.forEach(product -> {
-			product.setPrice(inventoryService.fecthInventoryPricefor(product.getId()));
+			product.setPrice(inventoryService.fetchInventoryPriceFor(product.getId()));
 		});
 		return filteredProducts;
 	}

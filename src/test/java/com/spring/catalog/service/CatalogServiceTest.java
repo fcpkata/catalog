@@ -1,4 +1,4 @@
-package com.spring.controller.service;
+package com.spring.catalog.service;
 
 import static com.spring.catalog.repository.CategoryRepository.BOOKS;
 import static com.spring.catalog.repository.CategoryRepository.ELECTRONICS;
@@ -19,7 +19,7 @@ import com.spring.catalog.model.FilterCriteria;
 import com.spring.catalog.model.Product;
 import com.spring.catalog.repository.ProductRepository;
 import com.spring.catalog.service.CatalogService;
-import com.spring.catalog.service.InventoryService;
+import com.spring.catalog.service.ProductInventoryService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CatalogServiceTest {
@@ -27,10 +27,10 @@ public class CatalogServiceTest {
 	private ProductRepository productRepository;
 
 	@Mock
-	private InventoryService inventoryService;
+	private InventoryService mockInventoryService;
 
 	@InjectMocks
-	private CatalogService service;
+	private CatalogService catalogService;
 
 	@Test
 	public void shouldReturnListOfProducts() {
@@ -38,7 +38,7 @@ public class CatalogServiceTest {
 		when(productRepository.getProducts()).thenReturn(expectedProductList);
 		FilterCriteria criteria = FilterCriteria.builder().build();
 
-		List<Product> products = service.getProducts(criteria);
+		List<Product> products = catalogService.getProducts(criteria);
 
 		assertThat(products).isEqualTo(expectedProductList);
 	}
@@ -50,7 +50,7 @@ public class CatalogServiceTest {
 		when(productRepository.getProducts()).thenReturn(expectedProductList);
 		FilterCriteria criteria = FilterCriteria.builder().categoryId("books").build();
 
-		List<Product> products = service.getProducts(criteria);
+		List<Product> products = catalogService.getProducts(criteria);
 
 		assertThat(products.size()).isEqualTo(1);
 		assertThat(products.get(0).getCategory()).isEqualTo(BOOKS.getCategory());
@@ -66,7 +66,7 @@ public class CatalogServiceTest {
 		FilterCriteria criteria = FilterCriteria.builder()
 				.metaDataFilters(Collections.singletonMap("genre", fictionGenre)).build();
 
-		List<Product> products = service.getProducts(criteria);
+		List<Product> products = catalogService.getProducts(criteria);
 
 		assertThat(products.size()).isEqualTo(1);
 		assertThat(products.get(0).getMetadata().get("genre")).isEqualTo(fictionGenre);
@@ -84,7 +84,7 @@ public class CatalogServiceTest {
 		FilterCriteria criteria = FilterCriteria.builder()
 				.metaDataFilters(Collections.singletonMap("genre", fictionGenre)).build();
 
-		List<Product> products = service.getProducts(criteria);
+		List<Product> products = catalogService.getProducts(criteria);
 
 		assertThat(products.size()).isEqualTo(1);
 		assertThat(products.get(0).getMetadata().get("genre")).isEqualTo(fictionGenre);
@@ -98,7 +98,7 @@ public class CatalogServiceTest {
 		when(productRepository.getProducts()).thenReturn(expectedProductList);
 		FilterCriteria criteria = FilterCriteria.builder().name("Clean Code").build();
 
-		List<Product> products = service.getProducts(criteria);
+		List<Product> products = catalogService.getProducts(criteria);
 
 		assertThat(products.size()).isEqualTo(1);
 		assertThat(products.get(0).getName()).isEqualTo("Clean Code");
@@ -112,7 +112,7 @@ public class CatalogServiceTest {
 		when(productRepository.getProducts()).thenReturn(expectedProductList);
 		FilterCriteria criteria = FilterCriteria.builder().name("clean code").build();
 
-		List<Product> products = service.getProducts(criteria);
+		List<Product> products = catalogService.getProducts(criteria);
 
 		assertThat(products.size()).isEqualTo(1);
 		assertThat(products.get(0).getName()).isEqualTo("Clean Code");
@@ -127,7 +127,7 @@ public class CatalogServiceTest {
 		when(productRepository.getProducts()).thenReturn(expectedProductList);
 		FilterCriteria criteria = FilterCriteria.builder().name("code").build();
 
-		List<Product> products = service.getProducts(criteria);
+		List<Product> products = catalogService.getProducts(criteria);
 
 		assertThat(products.size()).isEqualTo(2);
 		assertThat(products.get(0).getName()).isEqualTo("Clean Code");
@@ -143,7 +143,7 @@ public class CatalogServiceTest {
 		when(productRepository.getProducts()).thenReturn(expectedProductList);
 		FilterCriteria criteria = FilterCriteria.builder().name("Lean Startup").build();
 
-		List<Product> products = service.getProducts(criteria);
+		List<Product> products = catalogService.getProducts(criteria);
 
 		assertThat(products.size()).isEqualTo(0);
 	}
@@ -161,7 +161,7 @@ public class CatalogServiceTest {
 		FilterCriteria criteria = FilterCriteria.builder().name("code")
 				.metaDataFilters(Collections.singletonMap("author", "Uncle Bob")).build();
 
-		List<Product> products = service.getProducts(criteria);
+		List<Product> products = catalogService.getProducts(criteria);
 
 		assertThat(products.size()).isEqualTo(1);
 		assertThat(products.get(0).getName()).isEqualTo("Clean Code");
@@ -170,13 +170,12 @@ public class CatalogServiceTest {
 
 	@Test
 	public void shouldReturnProductWithPrice() {
-		List<Product> expectedProductList = Arrays
-				.asList(Product.builder().name("Clean Code").category(BOOKS.getCategory()).id("bookOne")
-						.metadata(Collections.singletonMap("author", "Uncle Bob")).build());
+		List<Product> expectedProductList = Arrays.asList(Product.builder().name("Clean Code").category(BOOKS.getCategory()).id("bookOne")
+																		   .metadata(Collections.singletonMap("author", "Uncle Bob")).build());
 		when(productRepository.getProducts()).thenReturn(expectedProductList);
-		when(inventoryService.fecthInventoryPricefor("bookOne")).thenReturn((double) 100);
+		when(mockInventoryService.fetchInventoryPriceFor("bookOne")).thenReturn((double) 100);
 		FilterCriteria criteria = FilterCriteria.builder().build();
-		List<Product> products = service.getProducts(criteria);
+		List<Product> products = catalogService.getProducts(criteria);
 
 		assertThat(products.size()).isEqualTo(1);
 		assertThat(products.get(0).getPrice()).isEqualTo(100);
