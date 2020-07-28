@@ -16,61 +16,67 @@ import com.spring.catalog.repository.ProductRepository;
 @Service
 public class CatalogService {
 	private ProductRepository productRepository;
-	
+	private InventoryService inventoryService;
+
 	@Autowired
-	public CatalogService(ProductRepository productRepository) {
+	public CatalogService(ProductRepository productRepository, InventoryService inventoryService) {
 		this.productRepository = productRepository;
+		this.inventoryService = inventoryService;
 	}
-	
-	public List<Product> getProducts(FilterCriteria criteria){
+
+	public List<Product> getProducts(FilterCriteria criteria) {
 		List<Product> allProducts = productRepository.getProducts();
-		return filterProducts(allProducts, criteria);
+		List<Product> filteredProducts = filterProducts(allProducts, criteria);
+
+		filteredProducts.forEach(product -> {
+			product.setPrice(inventoryService.fetchInventoryPriceFor(product.getId()));
+		});
+		return filteredProducts;
 	}
 
 	public Product getProduct(String productId) {
 		List<Product> allProducts = productRepository.getProducts();
-		
-		return allProducts.stream()
-			.filter(product -> product.getId().equals(productId))
-			.findFirst()
-			.orElseThrow(ProductNotFoundException::new);
+
+		 Product matchedProduct = allProducts.stream().filter(product -> product.getId().equals(productId)).findFirst()
+				.orElseThrow(ProductNotFoundException::new);
+		 
+		 matchedProduct.setPrice(inventoryService.fetchInventoryPriceFor(matchedProduct.getId()));
+		 
+		 return matchedProduct;
 	}
 
 	private List<Product> filterProducts(List<Product> allProducts, FilterCriteria criteria) {
 		List<Product> filteredProducts = allProducts;
-		
+
 		filteredProducts = filterProductsByName(criteria, filteredProducts);
 		filteredProducts = filterProductsByCategory(criteria, filteredProducts);
 		filteredProducts = filterProductsByMetadata(criteria, filteredProducts);
-		
+
 		return filteredProducts;
 	}
 
 	private List<Product> filterProductsByMetadata(FilterCriteria criteria, List<Product> filteredProducts) {
-		if(!CollectionUtils.isEmpty(criteria.getMetaDataFilters())) {
+		if (!CollectionUtils.isEmpty(criteria.getMetaDataFilters())) {
 			filteredProducts = filteredProducts.stream()
-				.filter(product -> product.hasMetadata(criteria.getMetaDataFilters()))
-				.collect(Collectors.toList());
+					.filter(product -> product.hasMetadata(criteria.getMetaDataFilters())).collect(Collectors.toList());
 		}
 		return filteredProducts;
 	}
 
 	private List<Product> filterProductsByCategory(FilterCriteria criteria, List<Product> filteredProducts) {
-		if(criteria.getCategoryId() != null) {
+		if (criteria.getCategoryId() != null) {
 			filteredProducts = filteredProducts.stream()
-				.filter(product -> product.getCategory().getId().equals(criteria.getCategoryId()))
-				.collect(Collectors.toList());
+					.filter(product -> product.getCategory().getId().equals(criteria.getCategoryId()))
+					.collect(Collectors.toList());
 		}
 		return filteredProducts;
 	}
 
 	private List<Product> filterProductsByName(FilterCriteria criteria, List<Product> filteredProducts) {
-		if(!StringUtils.isEmpty(criteria.getName())) {
-			filteredProducts = filteredProducts.stream()
-					.filter(product -> {
-						return product.getName().toLowerCase().contains(criteria.getName().toLowerCase());
-					})
-					.collect(Collectors.toList());
+		if (!StringUtils.isEmpty(criteria.getName())) {
+			filteredProducts = filteredProducts.stream().filter(product -> {
+				return product.getName().toLowerCase().contains(criteria.getName().toLowerCase());
+			}).collect(Collectors.toList());
 		}
 		return filteredProducts;
 	}

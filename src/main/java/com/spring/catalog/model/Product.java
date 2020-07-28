@@ -5,28 +5,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @EqualsAndHashCode
 @ToString
+@JsonInclude(Include.NON_NULL)
 public class Product {
 
 	private String id;
 	private String name;
 	private String description;
 	private Map<String, String> metadata;
-	private int price;
-	private int shippingPrice;
-	private int rating;
+	private Double price;
+	private Integer shippingPrice;
+	private Integer rating;
 	private Category category;
 	private List<String> imageLinks;
 	

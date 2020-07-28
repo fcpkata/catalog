@@ -1,26 +1,40 @@
 package com.spring.controller.acceptance;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.assertj.core.api.Assertions;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.test.web.client.match.MockRestRequestMatchers;
+import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.catalog.CatalogApplication;
+import com.spring.catalog.model.Item;
 import com.spring.catalog.model.Product;
+import com.spring.catalog.model.ProductInformation;
+import com.spring.catalog.model.ProductInformations;
 import com.spring.catalog.repository.CategoryRepository;
 
 @RunWith(SpringRunner.class)
@@ -32,6 +46,38 @@ public class GetProductsAcceptanceTest {
 	private MockMvc mockMvc;
 	
 	private ObjectMapper mapper = new ObjectMapper();
+	
+	private MockRestServiceServer inventoryMockRestServiceServer;
+	
+	@Autowired
+	private RestTemplate inventoryRestTemplate;
+	
+	@Before
+	public void before() throws JsonProcessingException {
+		inventoryMockRestServiceServer = MockRestServiceServer.createServer(inventoryRestTemplate);
+		
+		inventoryMockRestServiceServer.expect(org.springframework.test.web.client.ExpectedCount.manyTimes() , 
+												MockRestRequestMatchers.requestTo(containsString("/v1/item/")))
+		.andRespond(MockRestResponseCreators.withSuccess(
+				mapper.writeValueAsString(new ProductInformations(prepareProductInformationsFor(1))), MediaType.APPLICATION_STREAM_JSON));
+	}
+	
+
+	private List<ProductInformation> prepareProductInformationsFor(int numberOfItems) {
+		
+		List<ProductInformation> productInformations = new ArrayList<>();
+		
+		IntStream.range(0, numberOfItems).forEach(num -> {
+			ProductInformation productInformation = new ProductInformation("Seller_Id_"+num, Item.builder()
+																								.productId("Product_Id_"+num)
+																								.price(100.0-num)
+																								.quantity(num)
+																								.shippingPrice(20)
+																								.build() );
+			productInformations.add(productInformation);
+		});
+		return productInformations;
+	}
 
 	@Test
 	public void shouldReturnProductsCatalogWhenCalledWithBooksCategory() throws Exception {
