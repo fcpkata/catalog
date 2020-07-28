@@ -31,7 +31,7 @@ public class ProductInventoryService implements InventoryService {
 		
 		Optional<ProductInformation> findFirst = productInformations.getProductInformations().stream().sorted(priceSorter).findFirst();
 
-		return findFirst.map(productInfo -> productInfo.getItem().getPrice()).orElse(0.0);
+		return findFirst.map(productInfo -> productInfo.getItem().getPrice()).orElse(null);
 	}
 
 }

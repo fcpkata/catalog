@@ -44,12 +44,12 @@ public class ProductInventoryServiceTest {
 	}
 	
 	@Test
-	public void shouldReturnLeastPriceForNoSellerProduct() {
+	public void shouldReturnNullPriceForNoSellerProduct() {
 		
 		prepareMockResponceWithNumerOfSellerOf(0);
 		
 		Double productPrice = inventoryService.fetchInventoryPriceFor("Product_Id");
-		Assert.assertEquals(Double.valueOf(0.0), productPrice);
+		Assert.assertEquals(null, productPrice);
 	}
 
 	@Test

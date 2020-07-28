@@ -3,6 +3,7 @@ package com.spring.catalog.service;
 import static com.spring.catalog.repository.CategoryRepository.BOOKS;
 import static com.spring.catalog.repository.CategoryRepository.ELECTRONICS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -169,15 +170,31 @@ public class CatalogServiceTest {
 	}
 
 	@Test
-	public void shouldReturnProductWithPrice() {
+	public void shouldReturnProductInfoWithPrice_whenOneOrMoreSellersAreAvailable() {
 		List<Product> expectedProductList = Arrays.asList(Product.builder().name("Clean Code").category(BOOKS.getCategory()).id("bookOne")
 																		   .metadata(Collections.singletonMap("author", "Uncle Bob")).build());
 		when(productRepository.getProducts()).thenReturn(expectedProductList);
-		when(mockInventoryService.fetchInventoryPriceFor("bookOne")).thenReturn((double) 100);
+		when(mockInventoryService.fetchInventoryPriceFor("bookOne")).thenReturn(100.0);
 		FilterCriteria criteria = FilterCriteria.builder().build();
 		List<Product> products = catalogService.getProducts(criteria);
 
 		assertThat(products.size()).isEqualTo(1);
 		assertThat(products.get(0).getPrice()).isEqualTo(100);
+	}
+	
+	@Test
+	public void shouldReturnProductInfoWithoutPrice_whenNoSellersAreAvailable() throws Exception {
+		List<Product> expectedProductList = Arrays.asList(Product.builder().name("Clean Code").category(BOOKS.getCategory()).id("bookOne")
+				   .metadata(Collections.singletonMap("author", "Uncle Bob")).build());
+		
+		when(productRepository.getProducts()).thenReturn(expectedProductList);
+		when(mockInventoryService.fetchInventoryPriceFor("bookOne")).thenReturn(null);
+		
+		FilterCriteria criteria = FilterCriteria.builder().build();
+		
+		List<Product> products = catalogService.getProducts(criteria);
+		
+		assertThat(products.size()).isEqualTo(1);
+		assertThat(products.get(0).getPrice()).isEqualTo(null);
 	}
 }

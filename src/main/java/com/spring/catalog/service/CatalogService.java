@@ -37,8 +37,12 @@ public class CatalogService {
 	public Product getProduct(String productId) {
 		List<Product> allProducts = productRepository.getProducts();
 
-		return allProducts.stream().filter(product -> product.getId().equals(productId)).findFirst()
+		 Product matchedProduct = allProducts.stream().filter(product -> product.getId().equals(productId)).findFirst()
 				.orElseThrow(ProductNotFoundException::new);
+		 
+		 matchedProduct.setPrice(inventoryService.fetchInventoryPriceFor(matchedProduct.getId()));
+		 
+		 return matchedProduct;
 	}
 
 	private List<Product> filterProducts(List<Product> allProducts, FilterCriteria criteria) {
