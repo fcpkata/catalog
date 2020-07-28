@@ -31,7 +31,7 @@ public class MockProductRepository implements ProductRepository {
 				.id("PD001")
 				.name("Sold on a Monday")
 				.description("An unforgettable historical fiction novel by Kristina McMorris, inspired by a stunning piece of history from Depression-Era America.")
-				.price(1200)
+				.price(Double.valueOf(1200))
 				.shippingPrice(0)
 				.rating(4)
 				.category(CategoryRepository.BOOKS.getCategory())
@@ -49,7 +49,7 @@ public class MockProductRepository implements ProductRepository {
 				.metadata(
 							constructBook("Amy Belding Brown", "Historical Fiction"))
 	 			.description("A compelling, emotionally gripping novel of historical fiction. Perfect for readers of Americas First Daughter")
-	 			.price(1000)
+	 			.price(Double.valueOf(1000))
 	 			.shippingPrice(0)
 	 			.rating(4)
 	 			.imageLinks(Arrays.asList(
@@ -64,7 +64,7 @@ public class MockProductRepository implements ProductRepository {
 				.metadata(
 							constructBook("Lauren K. Denton", "Mystery"))
 	 			.description("In the South, family is always more complicated than it seems.")
-	 			.price(900)
+	 			.price(Double.valueOf(900))
 	 			.shippingPrice(0)
 	 			.rating(4)
 	 			.imageLinks(Arrays.asList(
@@ -75,7 +75,7 @@ public class MockProductRepository implements ProductRepository {
 		products.add(Product.builder()
 				.id("PD004")
 				.name("The Argumentative Indian by Amartya Sen")
-				.price(500)
+				.price(Double.valueOf(500))
 				.shippingPrice(0)
 				.rating(4)
 				.category(CategoryRepository.BOOKS.getCategory())
@@ -95,7 +95,7 @@ public class MockProductRepository implements ProductRepository {
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
 						constructBook("A L Basham", "Historical Fiction"))
-				.price(400)
+				.price(Double.valueOf(400))
 				.shippingPrice(0)
 				.rating(4)
 				.description("This book is considered a useful source of history for aspirants to the Indian civil services. "
@@ -111,7 +111,7 @@ public class MockProductRepository implements ProductRepository {
 				.metadata(
 						Collections.singletonMap("type", "Laptop"))
 	 			.description("Acer Swift 3 Thin & Light Laptop, 14 inch Full HD IPS")
-	 			.price(67900)
+	 			.price(Double.valueOf(67900))
 	 			.shippingPrice(1000)
 	 			.rating(3)
 	 			.imageLinks(Arrays.asList(
@@ -126,7 +126,7 @@ public class MockProductRepository implements ProductRepository {
 				.metadata(
 						Collections.singletonMap("type", "TV"))
 	 			.description("SAMSUNG 65-inch Class QLED Q70T Series - 4K UHD Dual LED Quantum HDR Smart TV")
-	 			.price(98600)
+	 			.price(Double.valueOf(98600))
 	 			.shippingPrice(10000)
 	 			.rating(5)
 	 			.imageLinks(Arrays.asList(
@@ -138,7 +138,7 @@ public class MockProductRepository implements ProductRepository {
 				.id("PD008")
 				.name("Classmate")
 				.description("100-pages")
-				.price(50)
+				.price(Double.valueOf(50))
 				.shippingPrice(0)
 				.rating(4)
 				.category(CategoryRepository.BOOKS.getCategory())
@@ -156,7 +156,7 @@ public class MockProductRepository implements ProductRepository {
 				.id("PD009")
 				.name("Samsung")
 				.description("Model-S10")
-				.price(96000)
+				.price(Double.valueOf(96000))
 				.shippingPrice(4999)
 				.rating(3)
 				.category(CategoryRepository.PHONE.getCategory())
@@ -177,7 +177,7 @@ public class MockProductRepository implements ProductRepository {
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
 						constructBook("Cormen", "Technical"))
-				.price(400)
+				.price(Double.valueOf(400))
 				.shippingPrice(0)
 				.rating(4)
 				.description("This book is about algorithms.")
@@ -193,7 +193,7 @@ public class MockProductRepository implements ProductRepository {
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
 						constructBook("Kent Beck", "Technical"))
-				.price(400)
+				.price(Double.valueOf(400))
 				.shippingPrice(0)
 				.rating(4)
 				.description("This book is about how to be practical while programming.")
@@ -209,7 +209,7 @@ public class MockProductRepository implements ProductRepository {
 				.category(CategoryRepository.BOOKS.getCategory())
 				.metadata(
 						constructBook("Robert C Martin", "Technical"))
-				.price(400)
+				.price(Double.valueOf(400))
 				.shippingPrice(0)
 				.rating(4)
 				.description("This book is about how to write clean code.")
