@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -19,7 +20,7 @@ public class CatalogService {
 	private InventoryService inventoryService;
 
 	@Autowired
-	public CatalogService(ProductRepository productRepository, InventoryService inventoryService) {
+	public CatalogService(ProductRepository productRepository,@Qualifier("productinventory") InventoryService inventoryService) {
 		this.productRepository = productRepository;
 		this.inventoryService = inventoryService;
 	}

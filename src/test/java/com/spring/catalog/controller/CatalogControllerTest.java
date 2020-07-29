@@ -1,6 +1,7 @@
 package com.spring.catalog.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,5 +49,10 @@ public class CatalogControllerTest {
 		
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isEqualTo(product);
+	}
+	
+	@Test
+	public void shouldReturnShippingPriceForA() throws Exception {
+		
 	}
 }
