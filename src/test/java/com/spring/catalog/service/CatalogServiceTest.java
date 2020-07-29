@@ -197,4 +197,5 @@ public class CatalogServiceTest {
 		assertThat(products.size()).isEqualTo(1);
 		assertThat(products.get(0).getPrice()).isEqualTo(null);
 	}
+
 }
