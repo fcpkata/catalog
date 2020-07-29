@@ -9,9 +9,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.spring.catalog.model.City;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ShippingPriceCalculatorTest {
+public class ShippingPriceCalculatorCordinatorTest {
 
-	ShippingPriceCalculator calculator = new ShippingPriceCalculator(new MockShippingChargesService());
+	ShippingPriceCalculatorCordinator calculator = new ShippingPriceCalculatorCordinator(new MockShippingChargesService());
 	
 	@Test
 	public void findsTheShippingPriceBetweenSameCity() {

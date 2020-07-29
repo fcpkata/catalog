@@ -49,6 +49,7 @@ public class MockShippingChargesService implements ShippingChargesService {
 		shippingCharges.put(from+"-"+to, price);
 	}
 	
+	@Override
 	public Map<String, Integer> fetchDomesticShippingCharges() {
 		return Collections.unmodifiableMap(shippingCharges);
 	}
@@ -56,6 +57,11 @@ public class MockShippingChargesService implements ShippingChargesService {
 	@Override
 	public int fetchIntenationalShippingCharges() {
 		return 250;
+	}
+
+	@Override
+	public int fetchLocalShippingCharges() {
+		return 0;
 	}
 
 }
