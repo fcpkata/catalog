@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,6 @@ import com.spring.catalog.service.InventoryService;
 public class CatalogController {
 	
 	private CatalogService catalogService;
-	@Qualifier("productinventory")
 	private InventoryService inventoryService;
 	
 	@Autowired
@@ -64,8 +65,8 @@ public class CatalogController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@GetMapping("/quantity")
-	public ResponseEntity<String> getQuantity(@RequestParam("productId") String productName) {
+	@GetMapping("/products/{productId}/quantity")
+	public ResponseEntity<String> getQuantity(@PathParam("productId") String productName) {
 		
 		inventoryService.checkProductAvailablity(productName);
 		return new ResponseEntity<>(HttpStatus.OK);
