@@ -18,16 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spring.catalog.model.FilterCriteria;
 import com.spring.catalog.model.Product;
 import com.spring.catalog.service.CatalogService;
+import com.spring.catalog.service.InventoryService;
 
 @RestController
 @RequestMapping(value = "/catalog/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CatalogController {
 	
 	private CatalogService catalogService;
+	private InventoryService inventoryService;
 	
 	@Autowired
-	public CatalogController(CatalogService catalogService) {
+	public CatalogController(CatalogService catalogService, InventoryService inventoryService) {
 		this.catalogService = catalogService;
+		this.inventoryService = inventoryService;
 	}
 
 	@GetMapping(path = "/products" )
@@ -57,5 +60,13 @@ public class CatalogController {
 		Product response = catalogService.getProduct(productId);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@GetMapping("/quantity")
+	public ResponseEntity<String> getQuantity(@RequestParam("productId") String productName) {
+		
+		inventoryService.checkProductAvailablity(productName);
+		return new ResponseEntity<>(HttpStatus.OK);
+		
 	}
 }
