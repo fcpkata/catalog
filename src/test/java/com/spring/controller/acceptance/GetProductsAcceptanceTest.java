@@ -72,7 +72,6 @@ public class GetProductsAcceptanceTest {
 																								.productId("Product_Id_"+num)
 																								.price(100.0-num)
 																								.quantity(num)
-																								.shippingPrice(20)
 																								.build() );
 			productInformations.add(productInformation);
 		});

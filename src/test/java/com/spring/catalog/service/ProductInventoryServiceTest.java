@@ -1,7 +1,5 @@
 package com.spring.catalog.service;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -12,14 +10,19 @@ import java.util.stream.IntStream;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.spring.catalog.exception.ProductNotFoundException;
 import com.spring.catalog.model.Item;
 import com.spring.catalog.model.ProductInformation;
 import com.spring.catalog.model.ProductInformations;
@@ -31,6 +34,11 @@ public class ProductInventoryServiceTest {
 	
 	@Mock
 	private RestTemplate mockRestTemplate;
+	
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
+	
+	private String url = "http://inventory-jx-production.35.224.175.156.nip.io";
 
 	@Before
 	public void setUp() {
@@ -79,6 +87,32 @@ public class ProductInventoryServiceTest {
 		Assert.assertEquals(Double.valueOf(98.0), productPrice);
 	}
 	
+	@Test
+	@Ignore
+	public void shouldThrowProductNotFoundExceptionForInvalidProductId() {
+		expectedException.equals(ProductNotFoundException.class);
+		expectedException.expectMessage("Product Not Found");
+		when(mockRestTemplate.getForEntity(eq(url+"v1/item/Invalid_id"), eq(ProductInformations.class))).thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND, "Product Not Found"));
+		inventoryService.checkProductAvailablity("Invalid_id");
+	}
+	
+	@Test
+	@Ignore
+	public void shouldThrowHttpClientErrorExceptionWhenThereIsNoQuantity() {
+		
+		prepareMockResponseWithNumerOfSellerAndZeroQuantity(4, 0);
+		expectedException.equals(HttpClientErrorException.class);
+		expectedException.expectMessage("No quantity available of this item");
+		inventoryService.checkProductAvailablity("Product_Id");
+	}
+	
+	@Test
+	@Ignore
+	public void shouldRetunNothingWhenQuantityIsAvailable() {
+		prepareMockResponseWithNumerOfSellerAndZeroQuantity(4, 4);
+		inventoryService.checkProductAvailablity("Product_Id");
+	}
+	
 	private void prepareMockResponceWithNumerOfSellerOf(int numberOfSellers) {
 		ProductInformations body = new ProductInformations(prepareProductInformationsFor(numberOfSellers));
 		ResponseEntity<ProductInformations> responseEntity = new ResponseEntity<ProductInformations>(body, HttpStatus.OK);
@@ -96,11 +130,32 @@ public class ProductInventoryServiceTest {
 																								.productId("Product_Id_"+num)
 																								.price(100.0-num)
 																								.quantity(num)
-																								.shippingPrice(20)
 																								.build() );
 			productInformations.add(productInformation);
 		});
 		return productInformations;
 	}
-
+	
+	private void prepareMockResponseWithNumerOfSellerAndZeroQuantity(int numberOfSellers, int quantity) {
+		ProductInformations body = new ProductInformations(prepareProductInformationsForZeroQuantity(numberOfSellers, quantity));
+		ResponseEntity<ProductInformations> responseEntity = new ResponseEntity<ProductInformations>(body, HttpStatus.OK);
+		
+		when(mockRestTemplate.getForEntity(eq(url+"/v1/item/Product_Id"), eq(ProductInformations.class))).thenReturn(responseEntity);
+	}
+	
+	private List<ProductInformation> prepareProductInformationsForZeroQuantity(int numberOfItems, int quantity) {
+		
+		List<ProductInformation> productInformations = new ArrayList<>();
+		
+		IntStream.range(0, numberOfItems).forEach(num -> {
+			ProductInformation productInformation = new ProductInformation("Seller_Id_"+num, Item.builder()
+																								.productId("Product_Id_"+num)
+																								.price(100.0-num)
+																								.quantity(quantity)
+																								.build() );
+			productInformations.add(productInformation);
+		});
+		return productInformations;
+	}
+	
 }

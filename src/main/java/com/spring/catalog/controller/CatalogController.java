@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spring.catalog.model.FilterCriteria;
 import com.spring.catalog.model.Product;
 import com.spring.catalog.service.CatalogService;
+import com.spring.catalog.service.InventoryService;
 
 @RestController
 @RequestMapping(value = "/catalog/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CatalogController {
 	
 	private CatalogService catalogService;
+	private InventoryService inventoryService;
 	
 	@Autowired
-	public CatalogController(CatalogService catalogService) {
+	public CatalogController(CatalogService catalogService, @Qualifier("productinventory") InventoryService inventoryService) {
 		this.catalogService = catalogService;
+		this.inventoryService = inventoryService;
 	}
 
 	@GetMapping(path = "/products" )
@@ -57,5 +63,13 @@ public class CatalogController {
 		Product response = catalogService.getProduct(productId);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@GetMapping("/products/{productId}/quantity")
+	public ResponseEntity<String> getQuantity(@PathParam("productId") String productName) {
+		
+		inventoryService.checkProductAvailablity(productName);
+		return new ResponseEntity<>(HttpStatus.OK);
+		
 	}
 }
