@@ -31,8 +31,14 @@ public class ProductInventoryService implements InventoryService {
 
 	@Override
 	public Double fetchInventoryPriceFor(String productId) {
+		
+		String baseUrl = System.getenv("inventoryService");
+		log.info("Inventory Url from System Variable -> "+baseUrl);
+		
+		String fullUrl = baseUrl+ "/v1/item/"+productId;
+		log.info("Complete Inventory URL -> "+fullUrl);
 
-		ResponseEntity<ProductInformations> response = restTemplate.getForEntity(System.getProperty("inventoryService") + "/v1/item/" + productId, ProductInformations.class);
+		ResponseEntity<ProductInformations> response = restTemplate.getForEntity(fullUrl, ProductInformations.class);
 		ProductInformations productInformations = response.getBody();
 
 		Comparator<ProductInformation> priceSorter = (p1, p2) -> p1.getItem().getPrice().compareTo(p2.getItem().getPrice());
