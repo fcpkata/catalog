@@ -16,7 +16,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
@@ -27,7 +28,7 @@ import com.spring.catalog.model.Item;
 import com.spring.catalog.model.ProductInformation;
 import com.spring.catalog.model.ProductInformations;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
 public class ProductInventoryServiceTest {
 
 	private InventoryService inventoryService;
@@ -42,7 +43,9 @@ public class ProductInventoryServiceTest {
 
 	@Before
 	public void setUp() {
-		System.setProperty("inventoryService", "url");
+		PowerMockito.mockStatic(System.class);
+		PowerMockito.when(System.getenv(eq("inventoryService"))).thenReturn("url");
+		//Assert.assertEquals("url", System.getenv("inventoryService"));
 		inventoryService = new ProductInventoryService(mockRestTemplate);
 	}
 
@@ -117,7 +120,7 @@ public class ProductInventoryServiceTest {
 		ProductInformations body = new ProductInformations(prepareProductInformationsFor(numberOfSellers));
 		ResponseEntity<ProductInformations> responseEntity = new ResponseEntity<ProductInformations>(body, HttpStatus.OK);
 		
-		when(mockRestTemplate.getForEntity(eq("url/v1/item/Product_Id"), eq(ProductInformations.class))).thenReturn(responseEntity);
+		when(mockRestTemplate.getForEntity(eq("null/v1/item/Product_Id"), eq(ProductInformations.class))).thenReturn(responseEntity);
 	}
 	
 
