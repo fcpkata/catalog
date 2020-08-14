@@ -16,7 +16,10 @@ import com.spring.catalog.exception.ProductNotFoundException;
 import com.spring.catalog.model.ProductInformation;
 import com.spring.catalog.model.ProductInformations;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ProductInventoryService implements InventoryService {
 
 	private RestTemplate restTemplate;
@@ -28,8 +31,14 @@ public class ProductInventoryService implements InventoryService {
 
 	@Override
 	public Double fetchInventoryPriceFor(String productId) {
+		
+		String baseUrl = System.getenv("inventoryService");
+		log.info("Inventory Url from System Variable -> "+baseUrl);
+		
+		String fullUrl = baseUrl+ "/v1/item/"+productId;
+		log.info("Complete Inventory URL -> "+fullUrl);
 
-		ResponseEntity<ProductInformations> response = restTemplate.getForEntity(System.getProperty("inventoryService") + "/v1/item/" + productId, ProductInformations.class);
+		ResponseEntity<ProductInformations> response = restTemplate.getForEntity(fullUrl, ProductInformations.class);
 		ProductInformations productInformations = response.getBody();
 
 		Comparator<ProductInformation> priceSorter = (p1, p2) -> p1.getItem().getPrice().compareTo(p2.getItem().getPrice());
@@ -41,11 +50,15 @@ public class ProductInventoryService implements InventoryService {
 
 	@Override
 	public void checkProductAvailablity(String productId) {
-		String url = System.getenv("inventoryService");
+		String baseUrl = System.getenv("inventoryService");
+		log.info("Inventory Url from System Variable -> "+baseUrl);
 		ResponseEntity<ProductInformations> response;
 		try {
-			response = restTemplate.getForEntity(url+ "/v1/item/"+productId, ProductInformations.class);
+			String fullUrl = baseUrl+ "/v1/item/"+productId;
+			log.info("Complete Inventory URL -> "+fullUrl);
+			response = restTemplate.getForEntity(fullUrl, ProductInformations.class);
 		} catch(HttpClientErrorException ex) {
+			log.error("Exception Occured"+ ex.getMessage()+","+ex.getCause());
 			throw new ProductNotFoundException();
 		}
 		getQuantity(response.getBody());
