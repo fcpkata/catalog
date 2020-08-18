@@ -1,6 +1,7 @@
 package com.spring.catalog.service;
 
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -120,7 +121,7 @@ public class ProductInventoryServiceTest {
 		ProductInformations body = new ProductInformations(prepareProductInformationsFor(numberOfSellers));
 		ResponseEntity<ProductInformations> responseEntity = new ResponseEntity<ProductInformations>(body, HttpStatus.OK);
 		
-		when(mockRestTemplate.getForEntity(eq("null/v1/item/Product_Id"), eq(ProductInformations.class))).thenReturn(responseEntity);
+		when(mockRestTemplate.getForEntity(contains("/v1/item/Product_Id"), eq(ProductInformations.class))).thenReturn(responseEntity);
 	}
 	
 
