@@ -32,11 +32,7 @@ public class ProductInventoryService implements InventoryService {
 	@Override
 	public Double fetchInventoryPriceFor(String productId) {
 		
-		String baseUrl = System.getenv("inventoryService");
-		log.info("Inventory Url from System Variable -> "+baseUrl);
-		
-		String fullUrl = baseUrl+ "/v1/item/"+productId;
-		log.info("Complete Inventory URL -> "+fullUrl);
+		String fullUrl = prepareUrl(productId);
 
 		ResponseEntity<ProductInformations> response = restTemplate.getForEntity(fullUrl, ProductInformations.class);
 		ProductInformations productInformations = response.getBody();
@@ -48,14 +44,25 @@ public class ProductInventoryService implements InventoryService {
 		return findFirst.map(productInfo -> productInfo.getItem().getPrice()).orElse(null);
 	}
 
+	private String prepareUrl(String productId) {
+		String baseUrl = Optional.ofNullable(System.getenv("inventoryService")).orElse("http://localhost:8080");
+		log.info("Inventory Url from System Variable -> "+baseUrl);
+		
+		
+		
+		String fullUrl = baseUrl+ "/v1/item/"+productId;
+		log.info("Complete Inventory URL -> "+fullUrl);
+		return fullUrl;
+	}
+
 	@Override
 	public void checkProductAvailablity(String productId) {
-		String baseUrl = System.getenv("inventoryService");
-		log.info("Inventory Url from System Variable -> "+baseUrl);
+		
+		String fullUrl = prepareUrl(productId);
+		
 		ResponseEntity<ProductInformations> response;
 		try {
-			String fullUrl = baseUrl+ "/v1/item/"+productId;
-			log.info("Complete Inventory URL -> "+fullUrl);
+
 			response = restTemplate.getForEntity(fullUrl, ProductInformations.class);
 		} catch(HttpClientErrorException ex) {
 			log.error("Exception Occured"+ ex.getMessage()+","+ex.getCause());
